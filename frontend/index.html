@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro - Mr. John Sports Bar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <link rel="stylesheet" href="style.css">
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<div class="container">
+
+  <div class="logo">
+    <img src="https://painel.lipplead.com/wp-content/uploads/2026/03/sem20fundo202062201_converted.webp">
+  </div>
+  <div class="card">
+  
+    <h2>Cadastro</h2>
+
+   <form id="form">
+
+  <div class="input-group" id="nomeGroup">
+
+    <input type="text" id="nome" placeholder="Nome">
+    <div class="error">Nome obrigatório</div>
+  </div>
+
+  <div class="input-group" id="cpfGroup">
+    <input type="text" id="cpf" placeholder="CPF">
+    <div class="error">CPF inválido</div>
+  </div>
+
+  <div class="input-group" id="emailGroup">
+    <input type="email" id="email" placeholder="E-mail">
+    <div class="error">E-mail inválido</div>
+  </div>
+
+  <div class="input-group" id="senhaGroup">
+    <input type="password" id="senha" placeholder="Senha">
+    <div class="error">Mínimo 6 caracteres</div>
+  </div>
+
+  <div class="input-group" id="confirmarSenhaGroup">
+    <input type="password" id="confirmarSenha" placeholder="Confirmar senha">
+    <div class="error">As senhas não coincidem</div>
+  </div>
+
+  <div class="terms">
+    <input type="checkbox" id="termos">
+    <label for="termos">Aceito os termos</label>
+  </div>
+
+  <button type="submit">Cadastrar</button>
+
+</form>
+  </div>
+
+  <script src="style.css"></script>
+
+</body>
+</html>
