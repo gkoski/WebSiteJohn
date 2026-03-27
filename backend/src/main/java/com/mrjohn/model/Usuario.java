@@ -1,5 +1,6 @@
 package com.mrjohn.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,6 +9,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 
 /**
  * Entidade Usuario configurada para Spring Boot.
@@ -26,38 +28,48 @@ public class Usuario {
     @NotNull
     @Size(min = 3, max = 100)
     private String nome;
+    
+    @Column(unique = true) 
+    private String cpf;
 
     @Email
     @NotNull
     private String email;
 
+    @Email
     @NotNull
-    @Size(min = 5, max = 50)
     private String login;
 
     @NotNull
-    private String senha; // armazenar hash, não texto puro
-
-    // Construtor padrão para o Spring/JPA
+    @Size(min = 6)
+    private String senha; 
+ 
     public Usuario() {}
 
-    // Construtor completo
-    public Usuario(String nome, String email, String login, String senha) {
+
+    public Usuario(String nome, String cpf, String email, String login, String senha) {
         this.nome = nome;
+        this.cpf = cpf;
         this.email = email;
-        this.login = login;
+        this.login = email;
         this.senha = senha;
     }
 
-    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
+    public String getCpf() { return cpf; }
+    public void setCpf(String cpf) { this.cpf = cpf; }
+    
     public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    
+    public void setEmail(String email) { 
+        this.email = email; 
+        this.login = email;
+    }
 
     public String getLogin() { return login; }
     public void setLogin(String login) { this.login = login; }
