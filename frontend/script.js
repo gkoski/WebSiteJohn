@@ -47,10 +47,35 @@ form.addEventListener("submit", function(e) {
     alert("Você precisa aceitar os termos");
     valid = false;
   }
+if (valid) {
+    // Montando o objeto com TUDO o que o Vitor validou, inclusive o CPF
+    const dadosUsuario = {
+      nome: nome.value,
+      cpf: cpf.value.replace(/\D/g, ""), // Envia só os números do CPF
+      email: email.value,
+      senha: senha.value
+    };
 
-  if (valid) {
-    alert("Cadastro realizado com sucesso!");
-    form.reset();
+    // Fazendo a ponte com o seu Backend Java
+    fetch("http://localhost:8080/usuarios", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(dadosUsuario)
+    })
+    .then(response => {
+      if (response.ok) {
+        alert("Show! Usuário cadastrado com sucesso.");
+        form.reset();
+      } else {
+        alert("Erro no servidor: " + response.status);
+      }
+    })
+    .catch(error => {
+      console.error("Erro de conexão:", error);
+      alert("Servidor parece estar desligado!");
+    });
   }
 });
 
