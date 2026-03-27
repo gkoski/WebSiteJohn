@@ -48,15 +48,15 @@ form.addEventListener("submit", function(e) {
     valid = false;
   }
 if (valid) {
-    // Montando o objeto com TUDO o que o Vitor validou, inclusive o CPF
+
     const dadosUsuario = {
       nome: nome.value,
-      cpf: cpf.value.replace(/\D/g, ""), // Envia só os números do CPF
+      cpf: cpf.value.replace(/\D/g, ""),
       email: email.value,
       senha: senha.value
     };
 
-    // Fazendo a ponte com o seu Backend Java
+   
     fetch("http://localhost:8080/usuarios", {
       method: "POST",
       headers: {
