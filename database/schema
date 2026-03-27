@@ -1,1 +1,21 @@
+CREATE TABLE Produtos (
+id_produto INT(10) AUTO_INCREMENT PRIMARY KEY,
+nome VARCHAR(50) NOT NULL,
+preco DECIMAL(6,2) NOT NULL
+);
 
+CREATE TABLE Categorias (
+id_produto INT NOT NULL,
+lanches VARCHAR(100) NOT NULL,
+bebidas VARCHAR(100) NOT NULL,
+FOREIGN KEY (id_produto) REFERENCES Produtos(id_produto)
+);
+
+CREATE TABLE Usuarios (
+id_usuarios INT(10) AUTO_INCREMENT PRIMARY KEY,
+nome VARCHAR(50) NOT NULL,
+idade INT(3) NOT NULL,
+sexo VARCHAR(1) NOT NULL,
+endereco VARCHAR(100) NOT NULL,
+telefone INT(12) NOT NULL
+);
