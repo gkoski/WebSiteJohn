@@ -1,19 +1,19 @@
 CREATE DATABASE mrjohn_db;
 
-CREATE TABLE Produtos (
+CREATE TABLE tb_produto (
 id_produto INT(10) AUTO_INCREMENT PRIMARY KEY,
 nome VARCHAR(50) NOT NULL,
 preco DECIMAL(6,2) NOT NULL
 );
 
-CREATE TABLE Categorias (
+CREATE TABLE tb_categoria (
 id_produto INT NOT NULL,
 lanches VARCHAR(100) NOT NULL,
 bebidas VARCHAR(100) NOT NULL,
 FOREIGN KEY (id_produto) REFERENCES Produtos(id_produto)
 );
 
-CREATE TABLE Usuarios (
+CREATE TABLE usuarios (
 id_usuarios INT(10) AUTO_INCREMENT PRIMARY KEY,
 nome VARCHAR(100) NOT NULL,
 cpf VARCHAR(11) NOT NULL,
