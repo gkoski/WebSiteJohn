@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Cardápio do John</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style_menu.css">
+</head>
+<body>
+
+    <header>
+        <h1>PAINEL ADMIN - Cardápio do John</h1>
+    </header>
+
+    <div class="container">
+        <div class="controls">
+            <input id="nomeInput" placeholder="Nome do produto">
+            <input id="descInput" placeholder="Descrição">
+            <input id="precoInput" placeholder="Preço (Ex: 25.90)">
+            <input id="fotoInput" placeholder="URL da Foto">
+            
+            <select id="catInput">
+                <option value="">Categoria...</option>
+                <option value="2">1 - Porções</option> 
+                <option value="3">2 - Burguers</option> 
+                <option value="4">3 - Bebidas</option> 
+            </select>
+            
+            <button id="btnSalvar" onclick="cadastrarNoJava()">Salvar</button>
+        </div>
+
+        <div class="menu" id="menuLista"></div>
+    </div>
+
+    <script src="script_menu.js"></script>
+</body>
+</html>
