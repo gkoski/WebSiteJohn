@@ -21,3 +21,17 @@ email VARCHAR(255) NOT NULL UNIQUE,
 login VARCHAR(255) NOT NULL UNIQUE,
 senha VARCHAR(255) NOT NULL
 );
+
+INSERT INTO tb_categoria (nome_categoria) VALUES ('Porções'), ('Burguers'), ('Bebidas');
+
+INSERT INTO tb_produto (nome, preco, id_categoria) VALUES 
+('Aneis de Cebola c/ Bolinho e Aipim c/ Carne Seca', 22.90, 1),
+('Porcao de Pernil', 38.00, 1),
+('Tirinhas de Picanha', 64.90, 1),
+('Mr Burguer Classic', 26.00, 1),
+('Mr Burguer Big Bacon', 44.90, 1),
+('Combo Mr Burguer Big Bacon', 49.50, 1),
+('Heineken Long Neck 330 ML', 12.00, 2),
+('Chopp Pilsen 500 ML', 12.00, 2),
+('Refrigerante Lata', 6.00, 2),
+('Monster 473 ML', 18.00, 2);
