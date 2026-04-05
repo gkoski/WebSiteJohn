@@ -1,6 +1,8 @@
 package com.mrjohn.model;
 
 import java.math.BigDecimal;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +27,7 @@ public class Produto {
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
+	@JsonIgnoreProperties("produto")
     private Categoria categoria;
 
 	public Long getId() {
