@@ -1,37 +1,40 @@
-CREATE DATABASE mrjohn_db;
-
-CREATE TABLE tb_produto (
-id_produto INT(10) AUTO_INCREMENT PRIMARY KEY,
-nome VARCHAR(50) NOT NULL,
-preco DECIMAL(6,2) NOT NULL
-);
+CREATE DATABASE IF NOT EXISTS mrjohn_db;
+USE mrjohn_db;
 
 CREATE TABLE tb_categoria (
-id_produto INT NOT NULL,
-lanches VARCHAR(100) NOT NULL,
-bebidas VARCHAR(100) NOT NULL,
-FOREIGN KEY (id_produto) REFERENCES Produtos(id_produto)
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE tb_produto (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    descricao VARCHAR(255),
+    preco DECIMAL(19,2),
+    foto VARCHAR(255),
+    categoria_id BIGINT,
+    CONSTRAINT fk_produto_categoria FOREIGN KEY (categoria_id) REFERENCES tb_categoria(id)
 );
 
 CREATE TABLE usuarios (
-id_usuarios INT(10) AUTO_INCREMENT PRIMARY KEY,
-nome VARCHAR(100) NOT NULL,
-cpf VARCHAR(11) NOT NULL UNIQUE,
-email VARCHAR(255) NOT NULL UNIQUE,
-login VARCHAR(255) NOT NULL UNIQUE,
-senha VARCHAR(255) NOT NULL
+    id_usuarios INT(10) AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    login VARCHAR(255) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL
 );
 
-INSERT INTO tb_categoria (nome_categoria) VALUES ('Porções'), ('Burguers'), ('Bebidas');
+INSERT INTO tb_categoria (nome) VALUES ('Porções'), ('Burguers'), ('Bebidas');
 
-INSERT INTO tb_produto (nome, preco, id_categoria) VALUES 
+INSERT INTO tb_produto (nome, preco, categoria_id) VALUES 
 ('Aneis de Cebola c/ Bolinho e Aipim c/ Carne Seca', 22.90, 1),
 ('Porcao de Pernil', 38.00, 1),
 ('Tirinhas de Picanha', 64.90, 1),
-('Mr Burguer Classic', 26.00, 1),
-('Mr Burguer Big Bacon', 44.90, 1),
-('Combo Mr Burguer Big Bacon', 49.50, 1),
-('Heineken Long Neck 330 ML', 12.00, 2),
-('Chopp Pilsen 500 ML', 12.00, 2),
-('Refrigerante Lata', 6.00, 2),
-('Monster 473 ML', 18.00, 2);
+('Mr Burguer Classic', 26.00, 2), -- ID 2 = Burguers
+('Mr Burguer Big Bacon', 44.90, 2),
+('Combo Mr Burguer Big Bacon', 49.50, 2),
+('Heineken Long Neck 330 ML', 12.00, 3), -- ID 3 = Bebidas
+('Chopp Pilsen 500 ML', 12.00, 3),
+('Refrigerante Lata', 6.00, 3),
+('Monster 473 ML', 18.00, 3);
