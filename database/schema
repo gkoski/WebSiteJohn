@@ -1,23 +1,26 @@
-CREATE DATABASE mrjohn_db;
-
-CREATE TABLE tb_produto (
-id_produto INT(10) AUTO_INCREMENT PRIMARY KEY,
-nome VARCHAR(50) NOT NULL,
-preco DECIMAL(6,2) NOT NULL
-);
+CREATE DATABASE IF NOT EXISTS mrjohn_db;
+USE mrjohn_db;
 
 CREATE TABLE tb_categoria (
-id_produto INT NOT NULL,
-lanches VARCHAR(100) NOT NULL,
-bebidas VARCHAR(100) NOT NULL,
-FOREIGN KEY (id_produto) REFERENCES Produtos(id_produto)
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE tb_produto (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    descricao VARCHAR(255),
+    preco DECIMAL(19,2),
+    foto VARCHAR(255),
+    categoria_id BIGINT,
+    CONSTRAINT fk_produto_categoria FOREIGN KEY (categoria_id) REFERENCES tb_categoria(id)
 );
 
 CREATE TABLE usuarios (
-id_usuarios INT(10) AUTO_INCREMENT PRIMARY KEY,
-nome VARCHAR(100) NOT NULL,
-cpf VARCHAR(11) NOT NULL UNIQUE,
-email VARCHAR(255) NOT NULL UNIQUE,
-login VARCHAR(255) NOT NULL UNIQUE,
-senha VARCHAR(255) NOT NULL
+    id_usuarios INT(10) AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    login VARCHAR(255) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL
 );
