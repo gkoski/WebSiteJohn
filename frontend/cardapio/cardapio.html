@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio - John's Burguer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style_cardapio.css">
+    <style>
+        /* Ajuste específico para o botão de finalizar na página do cliente */
+        .cart-status {
+            background: #ff0000;
+            padding: 10px 20px;
+            border-radius: 50px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+            z-index: 1000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>CARDÁPIO - John's Burguer</h1>
+    </header>
+
+    <div class="container">
+        <div class="menu" id="menuLista">
+            </div>
+    </div>
+
+    <div class="cart-status" onclick="irParaCheckout()">
+        🛒 Itens: <span id="qtd-itens">0</span> | Finalizar
+    </div>
+
+    <script src="cardapio.js"></script>
+</body>
+</html>
