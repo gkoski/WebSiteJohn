@@ -12,11 +12,14 @@ form.addEventListener("submit", function(e) {
   const confirmarSenha = document.getElementById("confirmarSenha");
   const termos = document.getElementById("termos");
 
+  // Limpar erros anteriores
   document.querySelectorAll(".input-group").forEach(group => {
     group.classList.remove("input-error");
-    group.querySelector(".error").style.display = "none";
+    const errorSpan = group.querySelector(".error");
+    if (errorSpan) errorSpan.style.display = "none";
   });
 
+  // Validações
   if (!nome.value.trim()) {
     showError("nomeGroup");
     valid = false;
@@ -47,8 +50,8 @@ form.addEventListener("submit", function(e) {
     alert("Você precisa aceitar os termos");
     valid = false;
   }
-if (valid) {
 
+  if (valid) {
     const dadosUsuario = {
       nome: nome.value,
       cpf: cpf.value.replace(/\D/g, ""),
@@ -56,7 +59,6 @@ if (valid) {
       senha: senha.value
     };
 
-   
     fetch("http://localhost:8080/usuarios", {
       method: "POST",
       headers: {
@@ -64,23 +66,35 @@ if (valid) {
       },
       body: JSON.stringify(dadosUsuario)
     })
-    .then(response => {
+    .then(async response => {
       if (response.ok) {
+
+        const usuarioCriado = await response.json();
+
+        localStorage.setItem('usuarioLogadoId', usuarioCriado.id);
+        localStorage.setItem('usuarioLogadoNome', usuarioCriado.nome);
+
         alert("Show! Usuário cadastrado com sucesso.");
         form.reset();
+
+        window.location.href = "/cardapio/cardapio.html"; 
+
       } else {
         alert("Erro no servidor: " + response.status);
       }
     })
     .catch(error => {
       console.error("Erro de conexão:", error);
-      alert("Servidor parece estar desligado!");
+      alert("O servidor Java parece estar desligado!");
     });
   }
 });
 
 function showError(groupId) {
   const group = document.getElementById(groupId);
-  group.classList.add("input-error");
-  group.querySelector(".error").style.display = "block";
+  if (group) {
+    group.classList.add("input-error");
+    const errorSpan = group.querySelector(".error");
+    if (errorSpan) errorSpan.style.display = "block";
+  }
 }
