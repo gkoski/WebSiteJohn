@@ -1,6 +1,5 @@
 const API_URL = 'http://localhost:8080/produtos';
 
-/* === CLASSE DE SERVIÇO (Gabriel - SCRUM 54 e 55) === */
 class CarrinhoService {
     constructor() {
         this.carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
@@ -65,13 +64,10 @@ window.renderizarCarrinhoLateral = () => {
     window.atualizarBadge();
 };
 
-/* === FUNÇÕES DE AÇÃO === */
 
 window.adicionarAoCarrinho = (id, nome, preco) => {
     service.adicionarItem({ id, nome, preco });
     window.atualizarBadge();
-    // Opcional: abrir a aba automaticamente ao adicionar
-    // window.toggleCarrinho(); 
 };
 
 window.removerDoCarrinho = (id) => {
@@ -85,7 +81,6 @@ window.atualizarBadge = () => {
     if (badge) badge.innerText = service.listarItens().length;
 };
 
-// ESSA É A FUNÇÃO QUE FALTAVA PARA O FINALIZAR FUNCIONAR
 window.irParaCheckout = () => {
     if (service.listarItens().length === 0) {
         alert("Seu carrinho está vazio!");
@@ -94,7 +89,6 @@ window.irParaCheckout = () => {
     window.location.href = "checkout.html";
 };
 
-/* === LISTAGEM DO BANCO === */
 async function listarProdutos() {
     try {
         const response = await fetch(API_URL);
