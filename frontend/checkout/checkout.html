@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="checkout.css"> 
+    <title>Checkout</title>
+</head>
+<body>
+    <div class="container">
+  <h2>Resumo do Pedido</h2>
+
+  <div id="lista-itens"></div>
+
+  <div class="total">
+    Total: R$ <span id="total">0.00</span>
+  </div>
+
+  <h3>Endereço de Entrega</h3>
+  <input type="text" id="endereco" placeholder="Digite seu endereço completo">
+
+  <h3>Observações</h3>
+  <textarea id="observacoes" rows="3" placeholder="Ex: sem cebola, entregar na portaria..."></textarea>
+
+  <button onclick="finalizarPedido()">Confirmar Pedido</button>
+</div>
+</body>
+</html>
