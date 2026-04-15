@@ -35,15 +35,29 @@ async function listarProdutos() {
     }
 }
 
-function adicionarAoCarrinho(id, nome, preco) {
-    // Adiciona o objeto do produto ao array do carrinho
-    carrinho.push({ id, nome, preco });
-    
-    // Salva no LocalStorage para a próxima página (Checkout)
-    localStorage.setItem('carrinho', JSON.stringify(carrinho));
-    
-    atualizarInterface();
+class CarrinhoService {
+  constructor() {
+    this.carrinho = [];
+  }
+
+  adicionarItem(item) {
+    this.carrinho.push(item);
+  }
+
+  removerItem(id) {
+    this.carrinho = this.carrinho.filter(item => item.id !== id);
+  }
+
+  limparCarrinho() {
+    this.carrinho = [];
+  }
+
+  listarItens() {
+    return this.carrinho;
+  }
 }
+
+export default new CarrinhoService();
 
 function atualizarInterface() {
     const contador = document.getElementById('qtd-itens');
@@ -63,3 +77,4 @@ window.onload = () => {
     listarProdutos();
     atualizarInterface();
 };
+
