@@ -1,34 +1,56 @@
 const API_URL = 'http://localhost:8080/produtos';
 
+/* === SERVIÇO DE CARRINHO (Unificado Gabriel & Douglas) === */
 class CarrinhoService {
     constructor() {
-        this.carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+        this.key = 'carrinho';
+        try {
+            const dadosSalvos = localStorage.getItem(this.key);
+            this.carrinho = dadosSalvos ? JSON.parse(dadosSalvos) : [];
+        } catch (e) {
+            this.carrinho = [];
+        }
+    }
+
+    salvarCarrinho() {
+        localStorage.setItem(this.key, JSON.stringify(this.carrinho));
     }
 
     adicionarItem(item) {
         this.carrinho.push(item);
-        this.salvarNoStorage();
+        this.salvarCarrinho();
+        this.atualizarTudo();
     }
 
     removerItem(id) {
+        // Remove apenas uma unidade para não apagar duplicados de vez
         const index = this.carrinho.findIndex(item => item.id === id);
         if (index > -1) {
             this.carrinho.splice(index, 1);
-            this.salvarNoStorage();
+            this.salvarCarrinho();
         }
+        this.atualizarTudo();
+    }
+
+    listarItens() {
+        return this.carrinho;
     }
 
     calcularTotal() {
         return this.carrinho.reduce((total, item) => total + item.preco, 0);
     }
 
-    listarItens() { return this.carrinho; }
-    salvarNoStorage() { localStorage.setItem('carrinho', JSON.stringify(this.carrinho)); }
+    atualizarTudo() {
+        window.atualizarBadge();
+        if (typeof window.renderizarCarrinhoLateral === 'function') {
+            window.renderizarCarrinhoLateral();
+        }
+    }
 }
 
 const service = new CarrinhoService();
 
-/* === INTERFACE E ABA LATERAL === */
+/* === INTERFACE E SIDEBAR === */
 
 window.toggleCarrinho = () => {
     const sidebar = document.getElementById('carrinhoLateral');
@@ -41,21 +63,20 @@ window.toggleCarrinho = () => {
 window.renderizarCarrinhoLateral = () => {
     const container = document.getElementById('itensCarrinhoLateral');
     const totalElement = document.getElementById('totalCarrinho');
-    const itens = service.listarItens();
-
     if (!container) return;
+
+    const itens = service.listarItens();
     container.innerHTML = '';
     
     itens.forEach((item) => {
         container.innerHTML += `
-            <div class="item-sidebar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 8px;">
+            <div class="item-sidebar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #333; padding-bottom: 8px;">
                 <div>
-                    <strong style="display:block; color: #fff;">${item.nome}</strong>
-                    <span style="color: #ffc107;">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
+                    <strong style="display:block;">${item.nome}</strong>
+                    <span style="color: #ff2b2b;">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
                 </div>
-                <button onclick="removerDoCarrinho(${item.id})" style="background:none; border:none; color:#ff4444; cursor:pointer; font-size: 1.2rem;">🗑️</button>
-            </div>
-        `;
+                <button onclick="removerDoCarrinho(${item.id})" style="background:none; border:none; color:#ff4444; cursor:pointer; font-size:1.2rem;">🗑️</button>
+            </div>`;
     });
 
     if (totalElement) {
@@ -64,21 +85,22 @@ window.renderizarCarrinhoLateral = () => {
     window.atualizarBadge();
 };
 
+/* === FUNÇÕES DE AÇÃO (GLOBAIS) === */
 
 window.adicionarAoCarrinho = (id, nome, preco) => {
     service.adicionarItem({ id, nome, preco });
-    window.atualizarBadge();
+    console.log(`Adicionado: ${nome}`);
 };
 
 window.removerDoCarrinho = (id) => {
     service.removerItem(id);
-    window.renderizarCarrinhoLateral();
-    window.atualizarBadge();
 };
 
 window.atualizarBadge = () => {
     const badge = document.getElementById('qtd-itens');
-    if (badge) badge.innerText = service.listarItens().length;
+    if (badge) {
+        badge.innerText = service.listarItens().length;
+    }
 };
 
 window.irParaCheckout = () => {
@@ -89,29 +111,33 @@ window.irParaCheckout = () => {
     window.location.href = "checkout.html";
 };
 
+/* === BUSCA DE PRODUTOS DA API === */
 async function listarProdutos() {
     try {
         const response = await fetch(API_URL);
         const produtos = await response.json();
         const lista = document.getElementById('menuLista');
         if (!lista) return;
+        
         lista.innerHTML = '';
-
         produtos.forEach(p => {
+            const preco = typeof p.preco === 'number' ? p.preco : 0;
             lista.innerHTML += `
                 <div class="card">
                     <img src="${p.foto || 'https://via.placeholder.com/300'}" onerror="this.src='https://via.placeholder.com/300'">
                     <div class="card-content">
-                        <h3>${p.nome}</h3>
+                        <h3>${p.nome || 'Sem Nome'}</h3>
                         <p>${p.descricao || ''}</p>
-                        <div class="price">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
-                        <button class="btn-adicionar" onclick="adicionarAoCarrinho(${p.id}, '${p.nome}', ${p.preco})">
+                        <div class="price">R$ ${preco.toFixed(2).replace('.', ',')}</div>
+                        <button class="btn-adicionar" onclick="adicionarAoCarrinho(${p.id}, '${p.nome}', ${preco})">
                             Adicionar ao Carrinho 🛒
                         </button>
                     </div>
                 </div>`;
         });
-    } catch (e) { console.error("Erro na API:", e); }
+    } catch (error) {
+        console.error("Erro ao carregar produtos:", error);
+    }
 }
 
 window.onload = () => {
