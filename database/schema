@@ -7,7 +7,7 @@ CREATE TABLE tb_categoria (
 );
 
 CREATE TABLE tb_produto (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    produto_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     descricao VARCHAR(255),
     preco DECIMAL(19,2),
@@ -23,4 +23,23 @@ CREATE TABLE usuarios (
     email VARCHAR(255) NOT NULL UNIQUE,
     login VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE tb_pedido (
+    pedido_id INT PRIMARY KEY AUTO_INCREMENT,
+    data_pedido DATE NOT NULL,
+    valor_total DECIMAL(10,2),
+    status VARCHAR(255),
+    cliente_id INT,
+    CONSTRAINT fk_cliente_pedido FOREING KEY (cliente_id) REFERENCES tb_cliente(id_cliente)
+);
+
+CREATE TABLE tb_pedido_itens (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    quantidade INT NOT NULL,
+    preco_unitario DECIMAL(10,2),
+    pedido_id INT,
+    produto_id INT,
+    CONSTRAINT fk_pedido_id_itens FOREING KEY (pedido_id) REFERENCES tb_pedido(pedido_id),
+    CONSTRAINT fk_produto_itens FOREING KEY (produto_id) REFERENCES tb_produto(produto_id)
 );
