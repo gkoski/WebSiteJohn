@@ -43,3 +43,6 @@ CREATE TABLE tb_pedido_itens (
     CONSTRAINT fk_pedido_id_itens FOREING KEY (pedido_id) REFERENCES tb_pedido(pedido_id),
     CONSTRAINT fk_produto_itens FOREING KEY (produto_id) REFERENCES tb_produto(produto_id)
 );
+
+CREATE INDEX idx_pedidos_cliente_id
+ON tb_pedido (cliente_id);
