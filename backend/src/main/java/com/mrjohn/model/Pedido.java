@@ -1,9 +1,11 @@
 package com.mrjohn.model;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal; // IMPORTANTE: Adicionamos essa biblioteca
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tb_pedido")
@@ -16,6 +18,7 @@ public class Pedido {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
+    @JsonIgnoreProperties("pedido")
     private Usuario usuario;
 
     @Column(name = "data_pedido")
@@ -28,6 +31,7 @@ public class Pedido {
     private String status;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("pedido")
     private List<ItemPedido> itens;
 
     public Pedido() {}
@@ -41,9 +45,11 @@ public class Pedido {
     public LocalDateTime getDataPedido() { return dataPedido; }
     public void setDataPedido(LocalDateTime dataPedido) { this.dataPedido = dataPedido; }
 
-    // Getter e Setter atualizados para BigDecimal
     public BigDecimal getValorTotal() { return valorTotal; }
     public void setValorTotal(BigDecimal valorTotal) { this.valorTotal = valorTotal; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
     public List<ItemPedido> getItens() { return itens; }
     public void setItens(List<ItemPedido> itens) { this.itens = itens; }
