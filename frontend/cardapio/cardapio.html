@@ -32,10 +32,24 @@
             </div>
     </div>
 
-    <div class="cart-status" onclick="irParaCheckout()">
-        🛒 Itens: <span id="qtd-itens">0</span> | Finalizar
+    <div id="carrinhoLateral" class="sidebar-carrinho">
+        <div class="sidebar-header">
+            <h2>Seu Pedido</h2>
+            <button onclick="toggleCarrinho()" class="btn-fechar">X</button>
+        </div>
+        
+        <div id="itensCarrinhoLateral">
+            </div>
+
+        <div class="sidebar-footer">
+            <h3 id="totalCarrinho">Total: R$ 0,00</h3>
+            <button class="btn-finalizar" onclick="irParaCheckout()">Finalizar Pedido ✅</button>
+        </div>
+    </div>
+
+    <div class="cart-status" onclick="toggleCarrinho()">
+        🛒 Itens: <span id="qtd-itens">0</span> | Ver Pedido
     </div>
 
     <script src="cardapio.js"></script>
 </body>
-</html>

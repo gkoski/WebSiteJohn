@@ -1,4 +1,3 @@
-/* --- Reset e Estilos Gerais --- */
 * {
     margin: 0;
     padding: 0;
@@ -9,7 +8,7 @@
 body {
     background: #0d0d0d;
     color: #fff;
-    padding-bottom: 80px; /* Espaço para o botão flutuante não cobrir o conteúdo */
+    padding-bottom: 80px;
 }
 
 header {
@@ -30,7 +29,6 @@ h1 {
     padding: 20px;
 }
 
-/* --- Grid de Produtos (Igual ao Admin) --- */
 .menu {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -41,7 +39,6 @@ h1 {
 @media(max-width: 900px) { .menu { grid-template-columns: repeat(2, 1fr); } }
 @media(max-width: 600px) { .menu { grid-template-columns: 1fr; } }
 
-/* --- Card de Produto --- */
 .card {
     background: #1a1a1a;
     border-radius: 15px;
@@ -87,37 +84,87 @@ h1 {
     font-weight: bold;
     font-size: 1.2rem;
     color: #ff2b2b;
-    margin-top: auto; /* Empurra o preço para o fim do conteúdo */
+    margin-top: auto;
 }
 
-/* --- Botão Adicionar ao Carrinho (Específico do Cliente) --- */
 .btn-adicionar {
     width: 100%;
     padding: 12px;
-    background: #28a745; /* Verde para destacar a ação de compra */
+    background: #28a745;
     color: #fff;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
     margin-top: 15px;
-    transition: background 0.3s, transform 0.2s;
+    transition: 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
 }
 
-.btn-adicionar:hover {
-    background: #218838;
-    transform: scale(1.02);
+.btn-adicionar:hover { background: #218838; }
+
+.sidebar-carrinho {
+    position: fixed;
+    right: -350px;
+    top: 0;
+    width: 320px;
+    height: 100%;
+    background: #0d0d0d;
+    box-shadow: -5px 0 25px rgba(255, 0, 0, 0.3);
+    transition: 0.4s ease;
+    z-index: 2000;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    border-left: 2px solid #ff0000;
 }
 
-.btn-adicionar:active {
-    transform: scale(0.98);
+.sidebar-carrinho.active { right: 0; }
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ff0000;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-/* --- Status do Carrinho (Botão Flutuante) --- */
+.btn-fechar { background: none; border: none; color: #fff; font-size: 1.8rem; cursor: pointer; }
+
+#itensCarrinhoLateral { flex-grow: 1; overflow-y: auto; }
+
+.item-sidebar {
+    background: #1a1a1a;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-remover-item { background: none; border: none; color: #ff4444; cursor: pointer; font-size: 1.2rem; }
+
+.sidebar-footer { border-top: 1px solid #333; padding-top: 20px; }
+
+#totalCarrinho { font-size: 1.2rem; color: #fff; text-align: center; margin-bottom: 15px; }
+
+.btn-finalizar {
+    width: 100%;
+    padding: 15px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
 .cart-status {
     position: fixed;
     bottom: 25px;
@@ -131,32 +178,6 @@ h1 {
     box-shadow: 0 5px 20px rgba(255, 0, 0, 0.5);
     z-index: 1000;
     transition: 0.3s;
-    border: 2px solid transparent;
 }
 
-.cart-status:hover {
-    background: #cc0000;
-    transform: scale(1.05);
-    border-color: #fff;
-}
-
-#qtd-itens {
-    background: #fff;
-    color: #ff0000;
-    padding: 2px 8px;
-    border-radius: 50%;
-    margin: 0 5px;
-    font-size: 0.9rem;
-}
-
-/* --- Responsividade para o Botão Flutuante --- */
-@media(max-width: 600px) {
-    .cart-status {
-        width: 90%;
-        left: 5%;
-        bottom: 15px;
-        right: auto;
-        text-align: center;
-        border-radius: 12px;
-    }
-}
+#qtd-itens { background: #fff; color: #ff0000; padding: 2px 8px; border-radius: 50%; margin: 0 5px; }
