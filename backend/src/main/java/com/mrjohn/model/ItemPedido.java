@@ -4,11 +4,12 @@ import jakarta.persistence.*;
 import java.math.BigDecimal; // O import está certo!
 
 @Entity
-@Table(name = "tb_item_pedido")
+@Table(name = "tb_pedido_itens")
 public class ItemPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "item_pedido_id")
     private Long id;
 
     @ManyToOne
@@ -21,6 +22,7 @@ public class ItemPedido {
 
     private Integer quantidade;
 
+    @Column(name = "preco_unitario")
     private BigDecimal precoUnitario;
 
     public ItemPedido() {}

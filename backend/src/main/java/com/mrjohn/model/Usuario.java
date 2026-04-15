@@ -18,11 +18,12 @@ import jakarta.validation.constraints.Size;
  * @author Douglas Ribeiro
  */
 @Entity
-@Table(name = "usuarios")
+@Table(name = "tb_usuario")
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "usuario_id")
     private Long id;
 
     @NotNull

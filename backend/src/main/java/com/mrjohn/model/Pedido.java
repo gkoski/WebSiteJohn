@@ -11,16 +11,21 @@ public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "pedido_id")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    @Column(name = "data_pedido")
     private LocalDateTime dataPedido = LocalDateTime.now();
 
-    // Mudamos de Double para BigDecimal
+    @Column(name = "valor_total", precision = 10, scale = 2)
     private BigDecimal valorTotal;
+
+    @Column(name = "status")
+    private String status;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<ItemPedido> itens;

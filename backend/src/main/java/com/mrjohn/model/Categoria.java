@@ -11,6 +11,7 @@ public class Categoria {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "categoria_id")
 	private Long id;
 
 	@NotBlank(message = "O nome da categoria é obrigatório")

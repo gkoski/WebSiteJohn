@@ -13,6 +13,7 @@ public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "produto_id")
     private Long id;
 
     @NotBlank(message = "O nome do produto é obrigatório")
