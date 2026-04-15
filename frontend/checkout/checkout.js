@@ -1,88 +1,107 @@
-const itens = [
-    { nome: "Produto A", preco: 25.50, quantidade: 2 },
-    { nome: "Produto B", preco: 15.00, quantidade: 1 }
-  ];
+const API_URL = 'http://localhost:8080/pedidos';
 
-  function carregarItens() {
-    const lista = document.getElementById("lista-itens");
-    let total = 0;
+window.onload = () => {
+    carregarResumo();
+};
 
-    itens.forEach(item => {
-      const subtotal = item.preco * item.quantidade;
-      total += subtotal;
+function carregarResumo() {
+    const listaElement = document.getElementById("lista-itens");
+    const totalElement = document.getElementById("total");
+    
+    // 1. Pega os dados brutos do localStorage
+    const dadosSalvos = localStorage.getItem('carrinho');
+    const itensBrutos = dadosSalvos ? JSON.parse(dadosSalvos) : [];
 
-      const div = document.createElement("div");
-      div.classList.add("item");
-      div.innerHTML = `
-        <span>${item.nome} (x${item.quantidade})</span>
-        <span>R$ ${subtotal.toFixed(2)}</span>
-      `;
-      lista.appendChild(div);
-    });
-
-    document.getElementById("total").innerText = total.toFixed(2);
-  }
-
-  async function finalizarPedido() {
-    const endereco = document.getElementById("endereco").value;
-    const observacoes = document.getElementById("observacoes").value;
-
-    if (!endereco) {
-      alert("Por favor, informe o endereço!");
-      return;
+    if (itensBrutos.length === 0) {
+        listaElement.innerHTML = "<p>Seu carrinho está vazio!</p>";
+        return;
     }
 
-    // Monta o pedido
-    const pedido = {
-      itens,
-      endereco,
-      observacoes
+    // 2. Agrupa itens repetidos para exibir "2x Hambúrguer" em vez de linhas separadas
+    const itensAgrupados = itensBrutos.reduce((acc, item) => {
+        const encontrado = acc.find(i => i.id === item.id);
+        if (encontrado) {
+            encontrado.quantidade = (encontrado.quantidade || 1) + (item.quantidade || 1);
+        } else {
+            acc.push({ ...item, quantidade: item.quantidade || 1 });
+        }
+        return acc;
+    }, []);
+
+    // 3. Renderiza na tela
+    listaElement.innerHTML = "";
+    let totalGeral = 0;
+
+    itensAgrupados.forEach(item => {
+        const subtotal = item.preco * item.quantidade;
+        totalGeral += subtotal;
+
+        const div = document.createElement("div");
+        div.style.display = "flex";
+        div.style.justifyContent = "space-between";
+        div.style.padding = "10px 0";
+        div.style.borderBottom = "1px solid #444";
+        
+        div.innerHTML = `
+            <span>${item.quantidade}x ${item.nome}</span>
+            <span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+        `;
+        listaElement.appendChild(div);
+    });
+
+    totalElement.innerText = totalGeral.toFixed(2).replace('.', ',');
+}
+
+async function finalizarPedido() {
+    const endereco = document.getElementById("endereco").value;
+    const observacoes = document.getElementById("observacoes").value;
+    const totalTexto = document.getElementById("total").innerText;
+
+    if (!endereco) {
+        alert("Informe o endereço!");
+        return;
+    }
+
+    // Preparar dados para o Java
+    const dadosSalvos = JSON.parse(localStorage.getItem('carrinho')) || [];
+    const usuario = JSON.parse(localStorage.getItem('usuario')) || { id: 1 };
+
+    // Agrupar para o DTO do Java
+    const itensParaEnviar = dadosSalvos.reduce((acc, item) => {
+        const encontrado = acc.find(i => i.produtoId === item.id);
+        if (encontrado) {
+            encontrado.quantidade += (item.quantidade || 1);
+        } else {
+            acc.push({ produtoId: item.id, quantidade: item.quantidade || 1 });
+        }
+        return acc;
+    }, []);
+
+    const pedidoDTO = {
+        usuarioId: usuario.id,
+        valorTotal: parseFloat(totalTexto.replace(',', '.')),
+        itens: itensParaEnviar
     };
 
     try {
-      const response = await fetch("/pedidos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(pedido)
-      });
-
-      if (response.status === 201) {
-        const data = await response.json();
-
-        const pedidoId = data.id; // backend deve retornar { id: 123 }
-
-        // Calcula total
-        let total = 0;
-        let listaItens = "";
-
-        itens.forEach(item => {
-          const subtotal = item.preco * item.quantidade;
-          total += subtotal;
-          listaItens += `- ${item.nome} (x${item.quantidade})\n`;
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(pedidoDTO)
         });
 
-        // Monta mensagem
-        const mensagem = `Olá John! Pedido #${pedidoId} confirmado.\nTotal: R$ ${total.toFixed(2)}\nItens:\n${listaItens}`;
-
-        // Número do John (coloque no formato internacional, ex: 5541999999999)
-        const telefone = "5541999999999";
-
-        // Codifica a mensagem para URL
-        const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
-
-        // Redireciona para o WhatsApp
-        window.location.href = url;
-
-      } else {
-        alert("Erro ao finalizar pedido.");
-      }
-
-    } catch (error) {
-      console.error("Erro:", error);
-      alert("Erro na comunicação com o servidor.");
+        if (response.ok) {
+            const pedido = await response.json();
+            alert("Pedido confirmado!");
+            localStorage.removeItem('carrinho');
+            
+            // Redireciona WhatsApp
+            const msg = `*Pedido #${pedido.id}*\nTotal: R$ ${totalTexto}\nEndereço: ${endereco}`;
+            window.location.href = `https://wa.me/5541999999999?text=${encodeURIComponent(msg)}`;
+        } else {
+            alert("Erro ao salvar no banco.");
+        }
+    } catch (e) {
+        alert("Erro de conexão.");
     }
-  }
-
-  carregarItens();
+}

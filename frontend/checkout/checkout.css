@@ -15,6 +15,7 @@ body {
     }
 
     h2 {
+      text-align: center;
       margin-bottom: 15px;
       color: white;
     }
@@ -34,7 +35,7 @@ body {
     }
 
     textarea, input {
-      width: 100%;
+      width: 96.5%;
       padding: 10px;
       margin-top: 10px;
       border-radius: 5px;
@@ -57,5 +58,5 @@ body {
 
     button:hover {
       background: rgba(255, 0, 0, 0.836);
-      color: black;
+      color: rgb(184, 184, 184);
     }

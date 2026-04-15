@@ -1,6 +1,10 @@
+/* ================================================================
+   MR. JOHN SPORTBAR - SISTEMA DE CARDÁPIO E CARRINHO
+   ================================================================
+*/
+
 const API_URL = 'http://localhost:8080/produtos';
 
-/* === SERVIÇO DE CARRINHO (Unificado Gabriel & Douglas) === */
 class CarrinhoService {
     constructor() {
         this.key = 'carrinho';
@@ -16,17 +20,36 @@ class CarrinhoService {
         localStorage.setItem(this.key, JSON.stringify(this.carrinho));
     }
 
-    adicionarItem(item) {
-        this.carrinho.push(item);
+    // ADICIONAR ITEM: Agora agrupa por ID
+    adicionarItem(produto) {
+        const itemExistente = this.carrinho.find(item => item.id === produto.id);
+
+        if (itemExistente) {
+            // Se já existe, apenas aumenta a quantidade
+            itemExistente.quantidade = (itemExistente.quantidade || 1) + 1;
+        } else {
+            // Se não existe, adiciona o novo objeto com quantidade 1
+            this.carrinho.push({
+                id: produto.id,
+                nome: produto.nome,
+                preco: produto.preco,
+                quantidade: 1
+            });
+        }
+
         this.salvarCarrinho();
         this.atualizarTudo();
     }
 
+    // REMOVER ITEM: Diminui a quantidade ou remove se chegar a zero
     removerItem(id) {
-        // Remove apenas uma unidade para não apagar duplicados de vez
         const index = this.carrinho.findIndex(item => item.id === id);
         if (index > -1) {
-            this.carrinho.splice(index, 1);
+            if (this.carrinho[index].quantidade > 1) {
+                this.carrinho[index].quantidade -= 1;
+            } else {
+                this.carrinho.splice(index, 1);
+            }
             this.salvarCarrinho();
         }
         this.atualizarTudo();
@@ -37,7 +60,8 @@ class CarrinhoService {
     }
 
     calcularTotal() {
-        return this.carrinho.reduce((total, item) => total + item.preco, 0);
+        // Multiplica preço por quantidade de cada item
+        return this.carrinho.reduce((total, item) => total + (item.preco * (item.quantidade || 1)), 0);
     }
 
     atualizarTudo() {
@@ -69,13 +93,17 @@ window.renderizarCarrinhoLateral = () => {
     container.innerHTML = '';
     
     itens.forEach((item) => {
+        const subtotal = item.preco * (item.quantidade || 1);
+        
         container.innerHTML += `
             <div class="item-sidebar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #333; padding-bottom: 8px;">
                 <div>
-                    <strong style="display:block;">${item.nome}</strong>
-                    <span style="color: #ff2b2b;">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
+                    <strong style="display:block;">${item.quantidade}x ${item.nome}</strong>
+                    <span style="color: #ff2b2b;">R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
                 </div>
-                <button onclick="removerDoCarrinho(${item.id})" style="background:none; border:none; color:#ff4444; cursor:pointer; font-size:1.2rem;">🗑️</button>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button onclick="removerDoCarrinho(${item.id})" style="background:none; border:none; color:#ff4444; cursor:pointer; font-size:1.2rem;">🗑️</button>
+                </div>
             </div>`;
     });
 
@@ -99,7 +127,9 @@ window.removerDoCarrinho = (id) => {
 window.atualizarBadge = () => {
     const badge = document.getElementById('qtd-itens');
     if (badge) {
-        badge.innerText = service.listarItens().length;
+        // Soma as quantidades individuais para mostrar o total real
+        const totalProdutos = service.listarItens().reduce((acc, item) => acc + (item.quantidade || 1), 0);
+        badge.innerText = totalProdutos;
     }
 };
 
@@ -108,7 +138,7 @@ window.irParaCheckout = () => {
         alert("Seu carrinho está vazio!");
         return;
     }
-    window.location.href = "checkout.html";
+    window.location.href = "../checkout/checkout.html";
 };
 
 /* === BUSCA DE PRODUTOS DA API === */
