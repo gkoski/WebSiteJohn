@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import com.mrjohn.model.Usuario;
 
+import java.util.Optional;
+
 /**
  * Camada de persistência para a tabela de usuários.
  * O JpaRepository já traz pronto: salvar, deletar, buscar por ID, etc.
@@ -11,6 +13,6 @@ import com.mrjohn.model.Usuario;
  */
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    
 
+    Optional<Usuario> findByEmail(String email);
 }
