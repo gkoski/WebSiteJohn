@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS mrjohn_db;
 USE mrjohn_db;
 
 CREATE TABLE tb_categoria (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    categoria_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL
 );
 
@@ -10,14 +10,14 @@ CREATE TABLE tb_produto (
     produto_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     descricao VARCHAR(255),
-    preco DECIMAL(19,2),
+    preco DECIMAL(19,2) NOT NULL,
     foto VARCHAR(255),
     categoria_id BIGINT,
-    CONSTRAINT fk_produto_categoria FOREIGN KEY (categoria_id) REFERENCES tb_categoria(id)
+    CONSTRAINT fk_produto_categoria FOREIGN KEY (categoria_id) REFERENCES tb_categoria(categoria_id)
 );
 
-CREATE TABLE usuarios (
-    id_usuarios INT(10) AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE tb_usuario (
+    usuario_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     cpf VARCHAR(11) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -26,23 +26,22 @@ CREATE TABLE usuarios (
 );
 
 CREATE TABLE tb_pedido (
-    pedido_id INT PRIMARY KEY AUTO_INCREMENT,
-    data_pedido DATE NOT NULL,
+    pedido_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    data_pedido DATETIME NOT NULL,
     valor_total DECIMAL(10,2),
     status VARCHAR(255),
-    cliente_id INT,
-    CONSTRAINT fk_cliente_pedido FOREING KEY (cliente_id) REFERENCES tb_cliente(id_cliente)
+    usuario_id BIGINT,
+    CONSTRAINT fk_usuario_pedido FOREIGN KEY (usuario_id) REFERENCES tb_usuario(usuario_id)
 );
 
 CREATE TABLE tb_pedido_itens (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    item_pedido_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     quantidade INT NOT NULL,
     preco_unitario DECIMAL(10,2),
-    pedido_id INT,
-    produto_id INT,
-    CONSTRAINT fk_pedido_id_itens FOREING KEY (pedido_id) REFERENCES tb_pedido(pedido_id),
-    CONSTRAINT fk_produto_itens FOREING KEY (produto_id) REFERENCES tb_produto(produto_id)
+    pedido_id BIGINT,
+    produto_id BIGINT,
+    CONSTRAINT fk_pedido_itens_id FOREIGN KEY (pedido_id) REFERENCES tb_pedido(pedido_id),
+    CONSTRAINT fk_produto_itens_id FOREIGN KEY (produto_id) REFERENCES tb_produto(produto_id)
 );
 
-CREATE INDEX idx_pedidos_cliente_id
-ON tb_pedido (cliente_id);
+CREATE INDEX idx_pedidos_usuario_id ON tb_pedido (usuario_id);
