@@ -64,7 +64,12 @@ async function finalizarPedido() {
 
     // Preparar dados para o Java
     const dadosSalvos = JSON.parse(localStorage.getItem('carrinho')) || [];
-    const usuario = JSON.parse(localStorage.getItem('usuario')) || { id: 1 };
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
+        if (!usuario) {
+        alert("Você precisa estar logado para finalizar o pedido!");
+        window.location.href = "../login/login.html";
+        return;
+        }
 
     // Agrupar para o DTO do Java
     const itensParaEnviar = dadosSalvos.reduce((acc, item) => {

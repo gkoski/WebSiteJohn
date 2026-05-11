@@ -41,8 +41,11 @@ form.addEventListener("submit", function(e) {
         const usuarioLogado = await response.json();
 
         // Salvando os dados no localStorage para usar no PedidoController depois
-        localStorage.setItem('usuarioLogadoId', usuarioLogado.id);
-        localStorage.setItem('usuarioLogadoNome', usuarioLogado.nome);
+        localStorage.setItem('usuarioLogado', JSON.stringify({
+          id: usuarioLogado.id,
+          nome: usuarioLogado.nome,
+          email: usuarioLogado.email
+        }));
 
         alert(`E aí, ${usuarioLogado.nome}! Login feito com sucesso.`);
         window.location.href = "../cardapio/cardapio.html"; 

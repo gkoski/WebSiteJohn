@@ -71,8 +71,11 @@ form.addEventListener("submit", function(e) {
 
         const usuarioCriado = await response.json();
 
-        localStorage.setItem('usuarioLogadoId', usuarioCriado.id);
-        localStorage.setItem('usuarioLogadoNome', usuarioCriado.nome);
+          localStorage.setItem('usuarioLogado', JSON.stringify({
+          id: usuarioCriado.id,
+          nome: usuarioCriado.nome,
+          email: usuarioCriado.email
+        }));
 
         alert("Show! Usuário cadastrado com sucesso.");
         form.reset();
