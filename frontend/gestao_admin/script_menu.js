@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8080/produtos';
+const API_URL = CONFIG.url('produtos');
 let idProdutoEmEdicao = null;
 
 

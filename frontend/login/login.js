@@ -31,7 +31,7 @@ form.addEventListener("submit", function(e) {
       senha: senha.value
     };
 
-    fetch("http://localhost:8080/usuarios/login", {
+    fetch(CONFIG.url('login'), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dadosLogin)

@@ -59,7 +59,7 @@ form.addEventListener("submit", function(e) {
       senha: senha.value
     };
 
-    fetch("http://localhost:8080/usuarios", {
+    fetch(CONFIG.url('usuarios'), {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -77,7 +77,7 @@ form.addEventListener("submit", function(e) {
         alert("Show! Usuário cadastrado com sucesso.");
         form.reset();
 
-        window.location.href = "/cardapio/cardapio.html"; 
+        window.location.href = "../cardapio/cardapio.html"; 
 
       } else {
         alert("Erro no servidor: " + response.status);
