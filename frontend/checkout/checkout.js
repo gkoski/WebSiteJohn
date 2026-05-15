@@ -97,12 +97,9 @@ async function finalizarPedido() {
 
         if (response.ok) {
             const pedido = await response.json();
-            alert("Pedido confirmado!");
+            localStorage.setItem('pedidoAtual', JSON.stringify(pedido));
             localStorage.removeItem('carrinho');
-            
-            // Redireciona WhatsApp
-            const msg = `*Pedido #${pedido.id}*\nTotal: R$ ${totalTexto}\nEndereço: ${endereco}`;
-            window.location.href = `https://wa.me/5541999999999?text=${encodeURIComponent(msg)}`;
+            window.location.href = "../checkout/acompanhamento.html";
         } else {
             alert("Erro ao salvar no banco.");
         }

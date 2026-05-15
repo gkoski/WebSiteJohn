@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Acompanhamento do Pedido - Mr. John Sports Bar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="acompanhamento.css">
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <img
+        src="https://painel.lipplead.com/wp-content/uploads/2026/03/sem20fundo202062201_converted.webp"
+        alt="Mr. John Sports Bar"
+        class="header-logo"
+      >
+      <h1>Acompanhamento do Pedido</h1>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Timeline -->
+    <section class="timeline-section">
+      <h2 class="section-title">Status do Pedido</h2>
+
+      <div class="timeline">
+
+        <div class="timeline-step completed" id="step-recebido">
+          <div class="step-icon">✔</div>
+          <div class="step-connector"></div>
+          <div class="step-label">Recebido</div>
+          <div class="step-time" id="time-recebido">--:--</div>
+        </div>
+
+        <div class="timeline-step" id="step-preparando">
+          <div class="step-icon">🍔</div>
+          <div class="step-connector"></div>
+          <div class="step-label">Preparando</div>
+          <div class="step-time" id="time-preparando">--:--</div>
+        </div>
+
+        <div class="timeline-step" id="step-enviado">
+          <div class="step-icon">🛵</div>
+          <div class="step-connector"></div>
+          <div class="step-label">Enviado</div>
+          <div class="step-time" id="time-enviado">--:--</div>
+        </div>
+
+        <div class="timeline-step" id="step-entregue">
+          <div class="step-icon">🏠</div>
+          <div class="step-connector last"></div>
+          <div class="step-label">Entregue</div>
+          <div class="step-time" id="time-entregue">--:--</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Resumo do Pedido -->
+    <section class="order-summary">
+      <h2 class="section-title">Itens do Pedido</h2>
+
+      <div class="order-card">
+        <div id="lista-itens" class="items-list">
+          <p class="empty-msg">Carregando itens...</p>
+        </div>
+
+        <div class="order-total">
+          <span>Total</span>
+          <span id="valor-total" class="total-value">R$ 0,00</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <a href="../cardapio/cardapio.html" class="btn-voltar">← Voltar ao Cardápio</a>
+    </div>
+
+  </main>
+
+  <script src="../config.js"></script>
+  <script src="acompanhamento.js"></script>
+</body>
+</html>
