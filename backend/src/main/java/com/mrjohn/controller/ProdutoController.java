@@ -35,6 +35,16 @@ public class ProdutoController {
 				.orElse(ResponseEntity.notFound().build());
 	}
 
+	@GetMapping("/destaque")
+	public ResponseEntity<List<Produto>> getDestaque() {
+		List<Produto> produtos = produtoRepository
+				.findByCategoriaIdOrderByIdAsc(1L)
+				.stream()
+				.limit(3)
+				.toList();
+		return ResponseEntity.ok(produtos);
+	}
+
 	@PostMapping
 	public ResponseEntity<Produto> post(@Valid @RequestBody Produto produto) {
 		// Regra de negócio: Só salva o produto se a categoria existir

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#F2E5D0" />
+  <title>Mr. John Sports Bar &amp; Eventos — Curitiba · Burger, chopp e jogo na tela</title>
+  <meta name="description" content="Sports bar e casa de eventos no Cajuru, Curitiba. Smash burger, chopp gelado, jogo no telão e shows ao vivo. R. Prof. Nivaldo Braga, 1930." />
+  <meta property="og:title" content="Mr. John Sports Bar" />
+  <meta property="og:description" content="Smash burger autoral, chopp gelado, telão em alta. A casa onde o jogo vira programa." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=1200&q=85" />
+
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23C5392B'/><text x='50%25' y='70%25' text-anchor='middle' font-family='Georgia, serif' font-weight='900' font-style='italic' font-size='40' fill='%23F2E5D0'>J</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Bagel+Fat+One&family=Caveat+Brush&display=swap" rel="stylesheet" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="index.css" />
+
+  <!-- Libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
+  <!-- Config API -->
+  <script src="../config.js"></script>
+</head>
+<body>
+
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader-logo">
+      <span>Mr.</span>
+      <span>John</span>
+    </div>
+    <div class="preloader-bar"></div>
+  </div>
+
+  <div class="scroll-prog" id="scrollProg" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#" class="logo">
+        <span class="lmr">Mr.</span>
+        <span class="ljn">John</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#sobre">Sobre nós</a></li>
+          <li><a href="#cardapio">Cardápio</a></li>
+          <li><a href="#app">App</a></li>
+          <li><a href="#avaliacoes">Avaliações</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+      <a href="login/login.html" class="btn btn-outline nav-cta magnetic" style="margin-right:8px">
+        Login
+      </a>
+      <a href="https://wa.me/5541997096628" target="_blank" rel="noopener" class="btn btn-primary nav-cta magnetic">
+        Faça seu pedido
+        <span class="arr">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </span>
+      </a>
+      <button class="nav-burger" aria-label="Abrir menu"><span></span></button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============== HERO ============== -->
+    <section class="hero">
+      <span class="float-circle fc-1" aria-hidden="true"></span>
+      <span class="float-circle fc-2" aria-hidden="true"></span>
+      <span class="float-circle fc-3" aria-hidden="true"></span>
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-image-wrap">
+            <div class="steam-wrap" aria-hidden="true">
+              <span class="steam s1"></span>
+              <span class="steam s2"></span>
+              <span class="steam s3"></span>
+              <span class="steam s4"></span>
+            </div>
+            <span class="floating-leaf" aria-hidden="true">🍔</span>
+            <div class="hero-image" id="heroImage">
+              <div class="img"></div>
+              <div class="price-tag">
+                <span class="label">A partir de</span>
+                <strong>R$ 28</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-text">
+            <span class="eyebrow" id="heroEyebrow">SPORTS BAR &amp; EVENTOS · CAJURU, CURITIBA</span>
+            <h1 class="hero-headline" id="heroHeadline">
+              <span class="ln"><span class="word">O</span> <span class="word">smash</span> <span class="word">burger</span></span>
+              <span class="ln">
+                <span class="word">mais</span>
+                <span class="word">
+                  <span class="hl-circle" id="hlCircle">
+                    <span class="accent">pesado</span>
+                    <svg viewBox="0 0 200 80" preserveAspectRatio="none">
+                      <path d="M 20 40 Q 40 12 100 12 Q 170 12 184 38 Q 192 60 140 70 Q 80 78 30 64 Q 8 56 20 40 Z" />
+                    </svg>
+                  </span>
+                </span>
+              </span>
+              <span class="ln">
+                <span class="word">
+                  <span class="hl-under" id="hlUnder">
+                    da cidade
+                    <svg viewBox="0 0 200 30" preserveAspectRatio="none">
+                      <path d="M 4 18 Q 50 6 100 14 Q 150 22 196 12" />
+                    </svg>
+                  </span>
+                </span>
+              </span>
+            </h1>
+            <p class="hero-sub" id="heroSub">Sports bar e casa de eventos no Cajuru. Smash burger autoral, chopp gelado, jogos no telão e shows ao vivo — do lado do Jockey Plaza. Aberto a partir das 17h.</p>
+            <div class="hero-ctas" id="heroCtas">
+              <a href="https://wa.me/5541997096628" target="_blank" rel="noopener" class="btn btn-primary magnetic">
+                Faça seu pedido
+                <span class="arr">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </span>
+              </a>
+              <a href="#cardapio" class="btn btn-ghost magnetic">Ver cardápio</a>
+            </div>
+            <div class="hero-meta" id="heroMeta">
+              <div class="hero-meta-item">
+                <span class="ic">★</span>
+                <div><strong>4.9</strong></div>
+                <span>59 avaliações Google</span>
+              </div>
+              <div class="hero-meta-item">
+                <span class="ic">⏱</span>
+                <div><strong>17h</strong></div>
+                <span>todo dia</span>
+              </div>
+              <div class="hero-meta-item">
+                <span class="ic">🎤</span>
+                <div><strong>Ao vivo</strong></div>
+                <span>shows e eventos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== INFINITE MARQUEE ============== -->
+    <section class="hero-strip" aria-hidden="true">
+      <div class="hs-track">
+        <span class="hs-item">MR Burguer <span class="dot"></span></span>
+        <span class="hs-item outline">Chopp Germânia <span class="dot"></span></span>
+        <span class="hs-item">Telão em Alta <span class="dot"></span></span>
+        <span class="hs-item outline">Cajuru · Curitiba <span class="dot"></span></span>
+        <span class="hs-item">Shows Ao Vivo <span class="dot"></span></span>
+        <span class="hs-item outline">Combo R$ 32,90 <span class="dot"></span></span>
+        <!-- duplicate for seamless loop -->
+        <span class="hs-item">MR Burguer <span class="dot"></span></span>
+        <span class="hs-item outline">Chopp Germânia <span class="dot"></span></span>
+        <span class="hs-item">Telão em Alta <span class="dot"></span></span>
+        <span class="hs-item outline">Cajuru · Curitiba <span class="dot"></span></span>
+        <span class="hs-item">Shows Ao Vivo <span class="dot"></span></span>
+        <span class="hs-item outline">Combo R$ 32,90 <span class="dot"></span></span>
+      </div>
+    </section>
+
+    <!-- ============== APP DOWNLOAD ============== -->
+    <section id="app" class="container">
+      <div class="app-block">
+        <div class="app-grid">
+          <div class="app-text blur-in">
+            <span class="eyebrow">● CARDÁPIO DIGITAL</span>
+            <h2 class="display-lg">Pede direto pelo WhatsApp</h2>
+            <p>Cardápio sempre atualizado, sem precisar instalar app nenhum. Manda no chat e a gente confirma na hora — combos, burguers, porções, chopp, tudo na ponta do dedo.</p>
+            <div class="app-buttons">
+              <a href="https://wa.me/5541997096628" target="_blank" rel="noopener" class="app-btn">
+                <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.1-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.4c.1-.1.2-.3.2-.4.1-.2 0-.3 0-.4 0-.1-.6-1.5-.9-2.1-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1.1 1.1-1.1 2.6 0 1.5 1.1 3 1.2 3.2.2.3 2.2 3.4 5.4 4.8.8.3 1.4.5 1.8.7.8.2 1.5.2 2 .1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.4z" fill="currentColor"/><path d="M20.5 3.5C18.5 1.5 15.8.5 13 .5 7.2.5 2.5 5.2 2.5 11c0 1.9.5 3.7 1.4 5.3L2 22.5l6.3-1.7c1.5.8 3.2 1.3 5 1.3 5.8 0 10.5-4.7 10.5-10.5 0-2.8-1.1-5.4-3.3-7.4zm-7.5 17.4c-1.6 0-3.1-.4-4.5-1.2l-.3-.2-3.7 1 1-3.6-.2-.3c-.9-1.4-1.3-3-1.3-4.6 0-4.9 4-8.8 8.8-8.8 2.4 0 4.6.9 6.2 2.6 1.7 1.7 2.6 3.9 2.6 6.2 0 4.9-4 8.9-8.6 8.9z" fill="currentColor"/></svg>
+                <div class="at"><small>Pedido em</small><strong>1 minuto</strong></div>
+              </a>
+              <a href="https://www.instagram.com/mrburguer" target="_blank" rel="noopener" class="app-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                <div class="at"><small>Acompanha no</small><strong>@mrburguer</strong></div>
+              </a>
+            </div>
+          </div>
+          <div class="app-visual">
+            <div class="phones-stack">
+              <div class="app-phone p1" id="appPhone1">
+                <div class="screen">
+                  <div class="wpp-header">
+                    <span class="wpp-back">‹</span>
+                    <span class="wpp-avatar">MJ</span>
+                    <div class="wpp-info">
+                      <strong>Mr. John Sports Bar</strong>
+                      <span>online</span>
+                    </div>
+                    <div class="wpp-icons">
+                      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    </div>
+                  </div>
+                  <div class="wpp-chat">
+                    <div class="wpp-bubble in">Boa noite, bem-vindo ao Mr. John 🍔<span class="time">21:14</span></div>
+                    <div class="wpp-bubble in img">
+                      <div class="pic" style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80');"></div>
+                      <div class="cap">Cardápio · burguers a partir de R$ 26<span class="time">21:14</span></div>
+                    </div>
+                    <div class="wpp-bubble out">Quero 1 MR Classic + chopp 500ml<span class="time">21:15 <span class="check">✓✓</span></span></div>
+                    <div class="wpp-bubble in">Confirmado ✅<span class="time">21:15</span></div>
+                  </div>
+                  <div class="wpp-footer">
+                    <span class="wpp-input">Digite uma mensagem</span>
+                    <span class="wpp-send"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </div>
+                </div>
+              </div>
+              <div class="app-phone p2" id="appPhone2">
+                <div class="screen">
+                  <div class="wpp-header">
+                    <span class="wpp-back">‹</span>
+                    <span class="wpp-avatar">MJ</span>
+                    <div class="wpp-info">
+                      <strong>Mr. John Sports Bar</strong>
+                      <span>digitando…</span>
+                    </div>
+                    <div class="wpp-icons">
+                      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    </div>
+                  </div>
+                  <div class="wpp-chat">
+                    <div class="wpp-bubble out">Quanto fica o combo classic?<span class="time">22:08 <span class="check">✓✓</span></span></div>
+                    <div class="wpp-bubble in">Combo MR Classic = burguer + batata 120g + refri 🍟</div>
+                    <div class="wpp-bubble in" style="font-weight: 700;">R$ 32,90<span class="time">22:08</span></div>
+                    <div class="wpp-bubble out">Manda 2!<span class="time">22:09 <span class="check">✓✓</span></span></div>
+                    <div class="wpp-bubble in">Anotado 🔥 pronto em 25min<span class="time">22:09</span></div>
+                  </div>
+                  <div class="wpp-footer">
+                    <span class="wpp-input">Digite uma mensagem</span>
+                    <span class="wpp-send"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== ABOUT / SOBRE ============== -->
+    <section class="section-pad" id="sobre">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-image ken-burns" id="aboutImage">
+            <div class="img"></div>
+            <span class="badge">Cajuru · Curitiba</span>
+            <span class="stamp">4.9<small>Google<br>★★★★★</small></span>
+          </div>
+          <div class="about-text blur-in">
+            <span class="eyebrow">QUEM É O MR. JOHN</span>
+            <h2 class="display-lg">A casa onde toda partida vira <span class="handwritten">programa</span>.</h2>
+            <p>Sports bar e casa de eventos no Cajuru, do lado do Jockey Plaza. Smash burger autoral, chopp gelado e a melhor experiência pra ver jogo em Curitiba — com show ao vivo nos fins de semana.</p>
+            <div class="features">
+              <div class="feature">
+                <span class="ic">🍔</span>
+                <div>
+                  <h4>Smash burger autoral</h4>
+                  <p>Blend artesanal, pão fresco do dia e molhos da casa.</p>
+                </div>
+              </div>
+              <div class="feature">
+                <span class="ic">📺</span>
+                <div>
+                  <h4>Telões pros jogos</h4>
+                  <p>Brasileirão, Champions, UFC, F1 — programação atualizada toda semana.</p>
+                </div>
+              </div>
+              <div class="feature">
+                <span class="ic">🎤</span>
+                <div>
+                  <h4>Eventos &amp; shows</h4>
+                  <p>Música ao vivo, festas privadas e confraternizações pela casa.</p>
+                </div>
+              </div>
+            </div>
+            <a href="https://wa.me/5541997096628" target="_blank" rel="noopener" class="btn btn-orange">
+              Reservar mesa
+              <span class="arr">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== CARDÁPIO ============== -->
+    <section class="section-pad" id="cardapio" style="background: var(--bg-soft);">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">O CARDÁPIO</span>
+          <h2 class="display-lg">Smash burgers que <span class="handwritten">viram lenda</span></h2>
+          <p>100% Angus, pão brioche selado, porções pra dividir, chopp Germânia direto da chopeira. Combos com batata e refri a partir de R$ 32,90.</p>
+        </div>
+        <div class="menu-carousel-wrap">
+        <div class="menu-carousel" id="menuCarousel">
+          <!-- cards carregados via API -->
+        </div>
+        <div class="carousel-controls">
+          <button class="cw-btn" id="cwPrev" aria-label="Anterior">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="cw-btn" id="cwNext" aria-label="Próximo">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============== REVIEWS ============== -->
+    <section class="section-pad" id="avaliacoes">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">QUEM JÁ VEIO, FALA</span>
+          <h2 class="display-lg">Avaliações <span class="handwritten">reais</span> da galera</h2>
+          <p>4.8 estrelas no Google com 312 avaliações. Aqui só alguns dos depoimentos que a gente recebe quase toda semana.</p>
+        </div>
+        <div class="reviews-grid">
+          <article class="review-card">
+            <div class="stars-svg">
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+            </div>
+            <p class="quote featured">Melhor smash burger da cidade, sem discussão. E o chopp tava na temperatura perfeita.</p>
+            <div class="author">
+              <div class="av">RS</div>
+              <div class="meta"><strong>Rafael Souza</strong><span>há 2 semanas · Local Guide</span></div>
+            </div>
+          </article>
+          <article class="review-card">
+            <div class="stars-svg">
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+            </div>
+            <p class="quote">Cheguei na hora do jogo, já tinha mesa reservada com vista pro telão. Atendimento incrível, lanche chegou rápido e o chopp não parava. Voltarei toda semana.</p>
+            <div class="author">
+              <div class="av">CM</div>
+              <div class="meta"><strong>Camila Martins</strong><span>há 1 mês</span></div>
+            </div>
+          </article>
+          <article class="review-card">
+            <div class="stars-svg">
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+            </div>
+            <p class="quote featured">A Tábua John dá pra 4. Pedi pra 2 e a gente comeu, riu, viu jogo, e ainda sobrou.</p>
+            <div class="author">
+              <div class="av">JP</div>
+              <div class="meta"><strong>João Paulo</strong><span>há 3 semanas</span></div>
+            </div>
+          </article>
+          <article class="review-card">
+            <div class="stars-svg">
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+            </div>
+            <p class="quote">Pedi pelo WhatsApp na sexta de Champions, tava lotado e ainda assim mandaram em 22 minutos. Burger ainda tava quente, chopp gelado num canecão térmico. Surreal.</p>
+            <div class="author">
+              <div class="av">LF</div>
+              <div class="meta"><strong>Leandro Faria</strong><span>há 4 dias</span></div>
+            </div>
+          </article>
+          <article class="review-card">
+            <div class="stars-svg">
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+            </div>
+            <p class="quote">Lugar com personalidade — nada genérico. Música no ponto, telão sem reflexo, banheiro impecável. Detalhe importa.</p>
+            <div class="author">
+              <div class="av">PA</div>
+              <div class="meta"><strong>Patrícia A.</strong><span>há 2 meses</span></div>
+            </div>
+          </article>
+          <article class="review-card">
+            <div class="stars-svg">
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2 L14.85 8.6 L22 9.27 L16.5 13.97 L18.18 21 L12 17.27 L5.82 21 L7.5 13.97 L2 9.27 L9.15 8.6 Z"/></svg>
+            </div>
+            <p class="quote featured">Old Fashioned no nível de bar de hotel cinco estrelas. Quem diria, num sports bar.</p>
+            <div class="author">
+              <div class="av">DR</div>
+              <div class="meta"><strong>Daniel Ribeiro</strong><span>há 1 semana</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== CONTATO ============== -->
+    <section class="section-pad" id="contato" style="padding-top: 0;">
+      <div class="container">
+        <div class="contact">
+          <div class="contact-grid">
+            <div>
+              <span class="eyebrow" style="color: var(--orange-bright);">VEM PRA CASA</span>
+              <h2 class="display-lg">Reserve sua mesa <span class="accent">com vista pro telão</span></h2>
+              <p>Estacionamento ao lado, transporte por aplicativo na porta. Aberto até as 02h sextas e sábados. WhatsApp responde em minutos.</p>
+              <a href="https://wa.me/5541997096628" target="_blank" rel="noopener" class="btn btn-orange">
+                Falar no WhatsApp
+                <span class="arr">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </span>
+              </a>
+            </div>
+            <div class="contact-info">
+              <div class="contact-row">
+                <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                <div>
+                  <strong>Endereço</strong>
+                  <p>R. Prof. Nivaldo Braga, 1930<br>Cajuru — Curitiba / PR · 82810-150<br><span style="color: var(--orange-bright); font-size: 13px;">Do lado do Jockey Plaza</span></p>
+                </div>
+              </div>
+              <div class="contact-row">
+                <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                <div>
+                  <strong>Funcionamento</strong>
+                  <p>Aberto a partir das 17h<br>Shows ao vivo · jogos no telão</p>
+                </div>
+              </div>
+              <div class="contact-row">
+                <div class="ic"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+                <div>
+                  <strong>Contato</strong>
+                  <p>
+                    <a href="https://wa.me/5541997096628" target="_blank" rel="noopener">WhatsApp · (41) 99709-6628</a><br>
+                    <a href="https://www.instagram.com/mrburguer" target="_blank" rel="noopener">@mrburguer</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="ft-grid">
+        <div class="ft-brand">
+          <a href="#" class="logo">
+            <span class="lmr">Mr.</span>
+            <span class="ljn">John</span>
+          </a>
+          <p>Sports Bar &amp; Eventos · Cajuru, Curitiba.<br>A casa onde toda partida vira programa, todo lanche vira lembrança, e toda mesa vira história.</p>
+        </div>
+        <div class="ft-col">
+          <h4>Navegação</h4>
+          <ul>
+            <li><a href="#sobre">Sobre nós</a></li>
+            <li><a href="#cardapio">Cardápio</a></li>
+            <li><a href="#app">App</a></li>
+            <li><a href="#avaliacoes">Avaliações</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h4>Contato</h4>
+          <ul>
+            <li><a href="https://wa.me/5541997096628" target="_blank" rel="noopener">WhatsApp</a></li>
+            <li><a href="tel:+5541997096628">(41) 99709-6628</a></li>
+            <li><a href="https://www.instagram.com/mrburguer" target="_blank" rel="noopener">@mrburguer</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h4>Endereço</h4>
+          <ul>
+            <li><span style="color: var(--cream);">R. Prof. Nivaldo Braga, 1930</span></li>
+            <li><span style="color: var(--cream);">Cajuru · Curitiba/PR</span></li>
+            <li><span style="color: var(--text-muted);">CEP 82810-150</span></li>
+            <li><span style="color: var(--orange-bright);">Aberto a partir das 17h</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="ft-bottom">
+        <span>© 2026 Mr. John Sports Bar &amp; Burger. Todos os direitos reservados.</span>
+        <span>Beba com responsabilidade. Proibida a venda de bebidas alcoólicas a menores de 18 anos.</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="replay-btn" id="replayBtn" aria-label="Reproduzir animações novamente">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    Replay animações
+  </button>
+
+  <a href="https://wa.me/5541997096628" target="_blank" rel="noopener" class="wpp-float" aria-label="Falar no WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.1-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.4c.1-.1.2-.3.2-.4.1-.2 0-.3 0-.4 0-.1-.6-1.5-.9-2.1-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1.1 1.1-1.1 2.6 0 1.5 1.1 3 1.2 3.2.2.3 2.2 3.4 5.4 4.8.8.3 1.4.5 1.8.7.8.2 1.5.2 2 .1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.4z"/><path d="M20.5 3.5C18.5 1.5 15.8.5 13 .5 7.2.5 2.5 5.2 2.5 11c0 1.9.5 3.7 1.4 5.3L2 22.5l6.3-1.7c1.5.8 3.2 1.3 5 1.3 5.8 0 10.5-4.7 10.5-10.5 0-2.8-1.1-5.4-3.3-7.4zm-7.5 17.4c-1.6 0-3.1-.4-4.5-1.2l-.3-.2-3.7 1 1-3.6-.2-.3c-.9-1.4-1.3-3-1.3-4.6 0-4.9 4-8.8 8.8-8.8 2.4 0 4.6.9 6.2 2.6 1.7 1.7 2.6 3.9 2.6 6.2 0 4.9-4 8.9-8.6 8.9z"/></svg>
+  </a>
+
+
+  <!-- JS -->
+  <script src="index.js"></script>
+</body>
+</html>
