@@ -1,0 +1,529 @@
+/* ============================================================
+   PAINEL DE PEDIDOS — Mr. John Sports Bar
+   Mesma pegada visual do /acompanhamento (dark + #e50914)
+   ============================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #0d0d0d;
+    color: #fff;
+    min-height: 100vh;
+    padding-bottom: 60px;
+}
+
+/* === HEADER === */
+header {
+    background: #000;
+    border-bottom: 2px solid #e50914;
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.header-inner {
+    max-width: 1280px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.header-logo {
+    width: 70px;
+    object-fit: contain;
+}
+
+header h1 {
+    color: #e50914;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    flex: 1;
+}
+
+/* === NAV ADMIN === */
+.admin-nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.admin-nav .nav-link {
+    padding: 9px 18px;
+    border-radius: 999px;
+    background: #1a1a1a;
+    color: #ccc;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1px solid #2a2a2a;
+    transition: all 0.25s ease;
+}
+
+.admin-nav .nav-link:hover {
+    border-color: #e50914;
+    color: #fff;
+}
+
+.admin-nav .nav-link.active {
+    background: #e50914;
+    color: #fff;
+    border-color: #e50914;
+    box-shadow: 0 4px 16px rgba(229, 9, 20, 0.35);
+}
+
+/* === CONTAINER === */
+.container {
+    max-width: 1280px;
+    margin: 32px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+}
+
+.section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #222;
+}
+
+/* ============================================================
+   KPIs
+   ============================================================ */
+.kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.kpi-card {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: #e50914;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.35s ease;
+}
+
+.kpi-card:hover {
+    border-color: #3a3a3a;
+    transform: translateY(-2px);
+}
+
+.kpi-card:hover::before {
+    transform: scaleY(1);
+}
+
+.kpi-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.kpi-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+}
+
+.kpi-value.money {
+    color: #e50914;
+}
+
+@media (max-width: 900px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px) { .kpis { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   FILTROS
+   ============================================================ */
+.filtros-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.chip {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid #2a2a2a;
+    border-radius: 999px;
+    color: #aaa;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chip:hover {
+    color: #fff;
+    border-color: #3a3a3a;
+}
+
+.chip.active {
+    background: #e50914;
+    border-color: #e50914;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3);
+}
+
+.busca {
+    flex: 1;
+    min-width: 220px;
+    padding: 11px 16px;
+    border-radius: 10px;
+    border: 1px solid #2a2a2a;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease;
+}
+
+.busca:focus {
+    outline: none;
+    border-color: #e50914;
+}
+
+.busca::placeholder { color: #555; }
+
+.btn-atualizar {
+    padding: 11px 20px;
+    border-radius: 10px;
+    border: 1px solid #e50914;
+    background: transparent;
+    color: #e50914;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+}
+
+.btn-atualizar:hover {
+    background: #e50914;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(229, 9, 20, 0.4);
+}
+
+.btn-atualizar .dot {
+    width: 8px;
+    height: 8px;
+    background: #28a745;
+    border-radius: 50%;
+    animation: pulse-dot 1.6s infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* ============================================================
+   GRID DE PEDIDOS
+   ============================================================ */
+.pedidos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.card-pedido {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.card-pedido:hover {
+    border-color: #3a3a3a;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 26px rgba(229, 9, 20, 0.18);
+}
+
+.pedido-header {
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #2a2a2a;
+    background: #111;
+}
+
+.pedido-id {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+}
+
+.pedido-id span {
+    color: #e50914;
+}
+
+.pedido-hora {
+    font-size: 0.75rem;
+    color: #777;
+}
+
+.pedido-body {
+    padding: 14px 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cliente-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cliente-nome {
+    color: #eee;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.cliente-email {
+    color: #777;
+    font-size: 0.75rem;
+}
+
+.itens {
+    list-style: none;
+    margin-top: 4px;
+    border-top: 1px dashed #2a2a2a;
+    padding-top: 10px;
+}
+
+.itens li {
+    padding: 6px 0;
+    color: #ccc;
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.itens .qtd-badge {
+    background: #e50914;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+    min-width: 26px;
+    text-align: center;
+    margin-right: 8px;
+}
+
+.itens .item-nome {
+    flex: 1;
+    color: #ddd;
+}
+
+.itens .item-preco {
+    color: #aaa;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.pedido-total {
+    margin-top: auto;
+    padding: 12px 16px;
+    background: #111;
+    border-top: 2px solid #e50914;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pedido-total .label {
+    color: #888;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.pedido-total .valor {
+    color: #e50914;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+/* === STATUS BADGE === */
+.status-badge {
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-badge::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.status-badge.recebido    { color: #ffb300; background: rgba(255, 179, 0, 0.12); }
+.status-badge.preparando  { color: #2196F3; background: rgba(33, 150, 243, 0.14); }
+.status-badge.enviado     { color: #f4b942; background: rgba(244, 185, 66, 0.14); }
+.status-badge.entregue    { color: #28a745; background: rgba(40, 167, 69, 0.16); }
+.status-badge.cancelado   { color: #e50914; background: rgba(229, 9, 20, 0.16); }
+
+/* === AÇÕES === */
+.pedido-acoes {
+    display: flex;
+    gap: 6px;
+    padding: 12px 16px;
+    background: #111;
+}
+
+.btn-acao {
+    flex: 1;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-avancar {
+    background: #28a745;
+    color: #fff;
+}
+
+.btn-avancar:hover {
+    background: #218838;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.35);
+}
+
+.btn-avancar:disabled {
+    background: #2a2a2a;
+    color: #555;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-cancelar {
+    background: transparent;
+    border: 1px solid #3a3a3a;
+    color: #888;
+}
+
+.btn-cancelar:hover {
+    border-color: #e50914;
+    color: #e50914;
+}
+
+/* === VAZIO === */
+.empty-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #555;
+    font-size: 0.95rem;
+    border: 1px dashed #2a2a2a;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.01);
+}
+
+/* === TOAST === */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    background: #1a1a1a;
+    color: #fff;
+    border-left: 4px solid #e50914;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.35s ease;
+    z-index: 100;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast.success { border-left-color: #28a745; }
+.toast.error   { border-left-color: #e50914; }
+
+/* === RESPONSIVO === */
+@media (max-width: 700px) {
+    header h1 { font-size: 1.05rem; }
+    .header-logo { width: 50px; }
+    .admin-nav { width: 100%; }
+    .filtros-bar { flex-direction: column; align-items: stretch; }
+    .chip-group { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; }
+    .chip { white-space: nowrap; }
+}

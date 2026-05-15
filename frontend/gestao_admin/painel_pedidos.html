@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Pedidos - Mr. John Sports Bar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="painel_pedidos.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e50914'/%3E%3Ctext x='50%25' y='55%25' text-anchor='middle' dominant-baseline='middle' font-family='Poppins,sans-serif' font-weight='700' font-size='18' fill='white'%3EJ%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+    <header>
+        <div class="header-inner">
+            <img
+                src="https://painel.lipplead.com/wp-content/uploads/2026/03/sem20fundo202062201_converted.webp"
+                alt="Mr. John Sports Bar"
+                class="header-logo"
+                onerror="this.style.display='none'"
+            >
+            <h1>Painel de Pedidos</h1>
+
+            <nav class="admin-nav">
+                <a href="menu.html" class="nav-link">Cardápio</a>
+                <a href="painel_pedidos.html" class="nav-link active">Pedidos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- KPIs -->
+        <section class="kpis">
+            <div class="kpi-card">
+                <span class="kpi-label">Total hoje</span>
+                <span class="kpi-value" id="kpi-total">0</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Em preparo</span>
+                <span class="kpi-value" id="kpi-preparo">0</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Prontos</span>
+                <span class="kpi-value" id="kpi-prontos">0</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Faturamento</span>
+                <span class="kpi-value money" id="kpi-faturamento">R$ 0,00</span>
+            </div>
+        </section>
+
+        <!-- Filtros -->
+        <section class="filtros">
+            <h2 class="section-title">Pedidos recebidos</h2>
+
+            <div class="filtros-bar">
+                <div class="chip-group" id="filtroStatus">
+                    <button class="chip active" data-status="">Todos</button>
+                    <button class="chip" data-status="RECEBIDO">Recebidos</button>
+                    <button class="chip" data-status="PREPARANDO">Preparando</button>
+                    <button class="chip" data-status="ENVIADO">Enviados</button>
+                    <button class="chip" data-status="ENTREGUE">Entregues</button>
+                    <button class="chip" data-status="CANCELADO">Cancelados</button>
+                </div>
+
+                <input id="buscaInput" class="busca" placeholder="Buscar cliente ou nº do pedido…">
+
+                <button id="btnAtualizar" class="btn-atualizar" onclick="listarPedidos()">
+                    <span class="dot"></span> Atualizar
+                </button>
+            </div>
+        </section>
+
+        <!-- Lista de pedidos -->
+        <section class="pedidos" id="pedidosLista">
+            <p class="empty-msg">Carregando pedidos…</p>
+        </section>
+
+    </main>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="../config.js"></script>
+    <script src="script_painel_pedidos.js"></script>
+</body>
+</html>
