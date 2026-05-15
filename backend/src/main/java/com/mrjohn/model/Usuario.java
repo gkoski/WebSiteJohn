@@ -1,5 +1,6 @@
 package com.mrjohn.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,6 +42,7 @@ public class Usuario {
     @NotNull
     private String login;
 
+    @JsonIgnore
     @NotNull
     @Size(min = 6)
     private String senha; 
