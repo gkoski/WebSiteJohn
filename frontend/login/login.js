@@ -44,7 +44,9 @@ form.addEventListener("submit", function(e) {
         localStorage.setItem('usuarioLogado', JSON.stringify({
           id: usuarioLogado.id,
           nome: usuarioLogado.nome,
-          email: usuarioLogado.email
+          email: usuarioLogado.email,
+          role: usuarioLogado.role,
+          token: usuarioLogado.token
         }));
 
         alert(`E aí, ${usuarioLogado.nome}! Login feito com sucesso.`);

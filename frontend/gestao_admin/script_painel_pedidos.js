@@ -250,9 +250,9 @@ async function avancarStatus(id) {
     renderTudo();
 
     try {
-        const res = await fetch(`${API_URL}/${id}/status`, {
+        const res = await fetch(`${CONFIG.API_URL}/pedidos/${id}/status`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            headers: CONFIG.getAuthHeaders(),
             body: JSON.stringify({ novoStatus: proximo })
         });
         if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -273,9 +273,9 @@ async function cancelarPedido(id) {
     renderTudo();
 
     try {
-        const res = await fetch(`${API_URL}/${id}/status`, {
+        const res = await fetch(`${CONFIG.API_URL}/pedidos/${id}/status`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            headers: CONFIG.getAuthHeaders(),
             body: JSON.stringify({ novoStatus: 'CANCELADO' })
         });
         if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -310,6 +310,7 @@ function inicializarEventos() {
 // Bootstrap
 // ------------------------------------------------------------
 window.addEventListener('DOMContentLoaded', () => {
+    if (!CONFIG.checkAdmin()) return;
     inicializarEventos();
     listarPedidos();
 });

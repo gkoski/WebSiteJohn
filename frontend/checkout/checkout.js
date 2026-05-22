@@ -1,8 +1,9 @@
 const API_URL = CONFIG.url('pedidos');
 
-window.onload = () => {
+document.addEventListener('DOMContentLoaded', () => {
+    if (!CONFIG.checkAuth()) return;
     carregarResumo();
-};
+});
 
 function carregarResumo() {
     const listaElement = document.getElementById("lista-itens");
@@ -91,7 +92,7 @@ async function finalizarPedido() {
     try {
         const response = await fetch(API_URL, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: CONFIG.getAuthHeaders(),
             body: JSON.stringify(pedidoDTO)
         });
 

@@ -170,7 +170,8 @@ async function listarProdutos() {
     }
 }
 
-window.onload = () => {
+window.addEventListener('DOMContentLoaded', () => {
+    if (!CONFIG.checkAuth()) return;
     listarProdutos();
     window.atualizarBadge();
-};
+});

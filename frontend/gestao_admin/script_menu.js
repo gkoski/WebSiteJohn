@@ -77,7 +77,7 @@ async function cadastrarNoJava() {
     try {
         const res = await fetch(API_URL, {
             method: metodo,
-            headers: { 'Content-Type': 'application/json' },
+            headers: CONFIG.getAuthHeaders(),
             body: JSON.stringify(produtoObj)
         });
 
@@ -96,7 +96,10 @@ async function cadastrarNoJava() {
 async function deletarDoBanco(id) {
     if(!confirm("Tem certeza que deseja excluir?")) return;
     try {
-        await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        await fetch(`${API_URL}/${id}`, { 
+            method: 'DELETE',
+            headers: CONFIG.getAuthHeaders()
+        });
         listarProdutos();
     } catch (error) {
         alert("Erro ao deletar.");
@@ -116,4 +119,7 @@ function cancelarEdicao() {
     btn.style.background = "#ff0000"; // Volta para vermelho
 }
 
-window.onload = listarProdutos;
+document.addEventListener('DOMContentLoaded', () => {
+    if (!CONFIG.checkAdmin()) return;
+    listarProdutos();
+});
