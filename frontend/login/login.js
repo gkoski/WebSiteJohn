@@ -50,7 +50,11 @@ form.addEventListener("submit", function(e) {
         }));
 
         alert(`E aí, ${usuarioLogado.nome}! Login feito com sucesso.`);
-        window.location.href = "../cardapio/cardapio.html"; 
+        if (usuarioLogado.role === 'ADMIN') {
+            window.location.href = "../gestao_admin/menu.html";
+        } else {
+            window.location.href = "../cardapio/cardapio.html";
+        }
 
       } else if (response.status === 401) {
         alert("E-mail ou senha incorretos.");

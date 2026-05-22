@@ -205,3 +205,25 @@ h1 {
     background: #e50914;
     color: #fff;
 }
+.usuario-nome {
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.btn-logout {
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: transparent;
+    border: 1px solid #e50914;
+    color: #e50914;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-logout:hover {
+    background: #e50914;
+    color: #fff;
+}

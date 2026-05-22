@@ -121,5 +121,6 @@ function cancelarEdicao() {
 
 document.addEventListener('DOMContentLoaded', () => {
     if (!CONFIG.checkAdmin()) return;
+    document.getElementById('nomeUsuario').textContent = getNomeUsuario();
     listarProdutos();
 });

@@ -19,10 +19,11 @@
                 onerror="this.style.display='none'"
             >
             <h1>Painel de Pedidos</h1>
-
             <nav class="admin-nav">
+                <span id="nomeUsuario" class="usuario-nome"></span>
                 <a href="menu.html" class="nav-link">Cardápio</a>
                 <a href="painel_pedidos.html" class="nav-link active">Pedidos</a>
+                <button onclick="logout()" class="btn-logout">Sair</button>
             </nav>
         </div>
     </header>
@@ -81,6 +82,7 @@
     <div id="toast" class="toast"></div>
 
     <script src="../config.js"></script>
+    <script src="../auth.js"></script>
     <script src="script_painel_pedidos.js"></script>
 </body>
 </html>

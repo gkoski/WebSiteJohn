@@ -172,6 +172,7 @@ async function listarProdutos() {
 
 window.addEventListener('DOMContentLoaded', () => {
     if (!CONFIG.checkAuth()) return;
+    document.getElementById('nomeUsuario').textContent = getNomeUsuario();
     listarProdutos();
     window.atualizarBadge();
 });

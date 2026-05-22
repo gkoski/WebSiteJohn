@@ -311,6 +311,7 @@ function inicializarEventos() {
 // ------------------------------------------------------------
 window.addEventListener('DOMContentLoaded', () => {
     if (!CONFIG.checkAdmin()) return;
+    document.getElementById('nomeUsuario').textContent = getNomeUsuario();
     inicializarEventos();
     listarPedidos();
 });

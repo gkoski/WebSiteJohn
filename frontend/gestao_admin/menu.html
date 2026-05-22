@@ -10,11 +10,15 @@
 <body>
 
     <header>
-        <h1>PAINEL ADMIN - Cardápio do John</h1>
-        <nav class="admin-nav">
-            <a href="menu.html" class="nav-link active">Cardápio</a>
-            <a href="painel_pedidos.html" class="nav-link">Pedidos</a>
-        </nav>
+        <div class="header-inner">
+            <h1>PAINEL ADMIN - Mr. John Sports Bar</h1>
+            <nav class="admin-nav">
+                <span id="nomeUsuario" class="usuario-nome"></span>
+                <a href="menu.html" class="nav-link active">Cardápio</a>
+                <a href="painel_pedidos.html" class="nav-link">Pedidos</a>
+                <button onclick="logout()" class="btn-logout">Sair</button>
+            </nav>
+        </div>
     </header>
 
     <div class="container">
@@ -38,6 +42,7 @@
     </div>
 
     <script src="../config.js"></script>
+    <script src="../auth.js"></script>
     <script src="script_menu.js"></script>
 </body>
 </html>
