@@ -1,6 +1,7 @@
 package com.mrjohn.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,11 +43,15 @@ public class Usuario {
     @NotNull
     private String login;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull
     @Size(min = 6)
-    private String senha; 
- 
+    private String senha;
+
+    @Column(name = "role")
+    private String role = "CLIENTE";
+
+
     public Usuario() {}
 
 
@@ -79,6 +84,9 @@ public class Usuario {
 
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
     // equals e hashCode baseados no ID
     @Override
