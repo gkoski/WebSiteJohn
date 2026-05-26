@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Acompanhamento do Pedido - Mr. John Sports Bar</title>
+  <title>Meus Pedidos - Mr. John Sports Bar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="acompanhamento.css">
@@ -16,72 +16,229 @@
         alt="Mr. John Sports Bar"
         class="header-logo"
       >
-      <h1>Acompanhamento do Pedido</h1>
+      <h1>Meus Pedidos</h1>
     </div>
   </header>
 
   <main class="container">
 
-    <!-- Timeline -->
-    <section class="timeline-section">
-      <h2 class="section-title">Status do Pedido</h2>
+    <!-- ===== TELA 1: LISTA DE PEDIDOS ===== -->
+    <section id="tela-lista">
+      <h2 class="section-title">Histórico de Pedidos</h2>
+      <div id="lista-pedidos">
+        <p class="empty-msg" id="msg-lista">Carregando pedidos...</p>
+      </div>
+      <div class="actions">
+        <a href="../cardapio/cardapio.html" class="btn-voltar">← Voltar ao Cardápio</a>
+      </div>
+    </section>
 
+    <!-- ===== TELA 2: DETALHE DO PEDIDO (oculta inicialmente) ===== -->
+    <section id="tela-detalhe" class="hidden">
+
+      <button class="btn-back" id="btn-back">← Voltar aos pedidos</button>
+
+      <h2 class="section-title" id="detalhe-titulo">Pedido #</h2>
+
+      <!-- Timeline -->
       <div class="timeline">
-
-        <div class="timeline-step completed" id="step-recebido">
+        <div class="timeline-step" id="step-recebido">
           <div class="step-icon">✔</div>
           <div class="step-connector"></div>
           <div class="step-label">Recebido</div>
-          <div class="step-time" id="time-recebido">--:--</div>
         </div>
-
         <div class="timeline-step" id="step-preparando">
           <div class="step-icon">🍔</div>
           <div class="step-connector"></div>
           <div class="step-label">Preparando</div>
-          <div class="step-time" id="time-preparando">--:--</div>
         </div>
-
         <div class="timeline-step" id="step-enviado">
           <div class="step-icon">🛵</div>
           <div class="step-connector"></div>
           <div class="step-label">Enviado</div>
-          <div class="step-time" id="time-enviado">--:--</div>
         </div>
-
         <div class="timeline-step" id="step-entregue">
           <div class="step-icon">🏠</div>
           <div class="step-connector last"></div>
           <div class="step-label">Entregue</div>
-          <div class="step-time" id="time-entregue">--:--</div>
         </div>
-
       </div>
-    </section>
 
-    <!-- Resumo do Pedido -->
-    <section class="order-summary">
-      <h2 class="section-title">Itens do Pedido</h2>
-
-      <div class="order-card">
-        <div id="lista-itens" class="items-list">
+      <!-- Itens do pedido -->
+      <div class="order-card" style="margin-top: 32px;">
+        <h2 class="section-title" style="padding: 20px 20px 0; margin-bottom: 0;">Itens do Pedido</h2>
+        <div id="detalhe-itens" class="items-list">
           <p class="empty-msg">Carregando itens...</p>
         </div>
-
         <div class="order-total">
           <span>Total</span>
-          <span id="valor-total" class="total-value">R$ 0,00</span>
+          <span id="detalhe-total" class="total-value">R$ 0,00</span>
         </div>
       </div>
-    </section>
 
-    <div class="actions">
-      <a href="../cardapio/cardapio.html" class="btn-voltar">← Voltar ao Cardápio</a>
-    </div>
+    </section>
 
   </main>
 
   <script src="../config.js"></script>
-  <script src="acompanhamento.js"></script>
+  <script>
+    // ============================================================
+    // HISTÓRICO DE PEDIDOS — lista todos e exibe detalhe ao clicar
+    // ============================================================
+
+    const STATUS_ORDER = ['RECEBIDO', 'PREPARANDO', 'ENVIADO', 'ENTREGUE'];
+    const STATUS_MAP = {
+      RECEBIDO:   'step-recebido',
+      PREPARANDO: 'step-preparando',
+      ENVIADO:    'step-enviado',
+      ENTREGUE:   'step-entregue',
+    };
+    const STATUS_LABEL = {
+      RECEBIDO:   { texto: 'Recebido',   cor: '#e59014' },
+      PREPARANDO: { texto: 'Preparando', cor: '#e5c014' },
+      ENVIADO:    { texto: 'Enviado',    cor: '#1490e5' },
+      ENTREGUE:   { texto: 'Entregue',   cor: '#28a745' },
+    };
+
+    function formatarMoeda(valor) {
+      return 'R$ ' + Number(valor).toFixed(2).replace('.', ',');
+    }
+
+    function formatarData(isoString) {
+      if (!isoString) return '--';
+      const d = new Date(isoString);
+      return d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // ---------- TELA 1: lista ----------
+
+    function renderizarListaPedidos(pedidos) {
+      const container = document.getElementById('lista-pedidos');
+
+      if (!pedidos || pedidos.length === 0) {
+        container.innerHTML = '<p class="empty-msg">Você ainda não fez nenhum pedido.</p>';
+        return;
+      }
+
+      // Mais recente primeiro
+      const ordenados = [...pedidos].reverse();
+
+      container.innerHTML = ordenados.map(pedido => {
+        const status = (pedido.status || 'RECEBIDO').toUpperCase();
+        const info = STATUS_LABEL[status] || { texto: status, cor: '#aaa' };
+        const qtdItens = (pedido.itens || pedido.pedidoItens || []).length;
+
+        return `
+          <div class="pedido-card" onclick="abrirDetalhe(${pedido.id})">
+            <div class="pedido-card-left">
+              <span class="pedido-id">#${pedido.id}</span>
+              <span class="pedido-data">${formatarData(pedido.dataPedido)}</span>
+              <span class="pedido-qtd">${qtdItens} ${qtdItens === 1 ? 'item' : 'itens'}</span>
+            </div>
+            <div class="pedido-card-right">
+              <span class="pedido-valor">${formatarMoeda(pedido.valorTotal || 0)}</span>
+              <span class="pedido-status" style="color: ${info.cor}; border-color: ${info.cor};">${info.texto}</span>
+              <span class="pedido-arrow">›</span>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // ---------- TELA 2: detalhe ----------
+
+    function atualizarTimeline(statusAtual) {
+      const indexAtual = STATUS_ORDER.indexOf((statusAtual || '').toUpperCase());
+      STATUS_ORDER.forEach((status, index) => {
+        const el = document.getElementById(STATUS_MAP[status]);
+        if (!el) return;
+        el.classList.remove('completed', 'active', 'pending');
+        if (index < indexAtual)      el.classList.add('completed');
+        else if (index === indexAtual) el.classList.add('active');
+        else                           el.classList.add('pending');
+      });
+    }
+
+    function renderizarItens(itens) {
+      const lista = document.getElementById('detalhe-itens');
+      if (!itens || itens.length === 0) {
+        lista.innerHTML = '<p class="empty-msg">Nenhum item encontrado.</p>';
+        return;
+      }
+      lista.innerHTML = itens.map(item => {
+        const nome  = item.nomeProduto || (item.produto && item.produto.nome) || item.nome || 'Produto';
+        const preco = item.precoUnitario || item.preco || 0;
+        return `
+          <div class="item-row">
+            <div class="item-info">
+              <span class="item-qty">${item.quantidade}x</span>
+              <span class="item-nome">${nome}</span>
+            </div>
+            <span class="item-preco">${formatarMoeda(preco * item.quantidade)}</span>
+          </div>`;
+      }).join('');
+    }
+
+    let todosPedidos = [];
+
+    function abrirDetalhe(pedidoId) {
+      const pedido = todosPedidos.find(p => p.id === pedidoId);
+      if (!pedido) return;
+
+      document.getElementById('detalhe-titulo').textContent = `Pedido #${pedido.id} — ${formatarData(pedido.dataPedido)}`;
+      atualizarTimeline(pedido.status || 'RECEBIDO');
+      renderizarItens(pedido.itens || pedido.pedidoItens || []);
+      document.getElementById('detalhe-total').textContent = formatarMoeda(pedido.valorTotal || 0);
+
+      document.getElementById('tela-lista').classList.add('hidden');
+      document.getElementById('tela-detalhe').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function voltarLista() {
+      document.getElementById('tela-detalhe').classList.add('hidden');
+      document.getElementById('tela-lista').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.getElementById('btn-back').addEventListener('click', voltarLista);
+
+    // ---------- Carregamento ----------
+
+    async function carregarPedidos() {
+      try {
+        const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
+        if (!usuarioLogado) {
+          document.getElementById('msg-lista').textContent = 'Faça login para ver seus pedidos.';
+          return;
+        }
+
+        const response = await fetch(CONFIG.url('pedidos') + '/usuario/' + usuarioLogado.id);
+        if (!response.ok) throw new Error('Erro ' + response.status);
+
+        const pedidos = await response.json();
+        todosPedidos = Array.isArray(pedidos) ? pedidos : [pedidos];
+        renderizarListaPedidos(todosPedidos);
+
+        // Se vier direto do checkout com um pedido recente no localStorage, abre ele direto
+        const pedidoRecente = localStorage.getItem('pedidoAtual');
+        if (pedidoRecente) {
+          const p = JSON.parse(pedidoRecente);
+          if (p && p.id) {
+            // Garante que ele está na lista; se não estiver, adiciona
+            if (!todosPedidos.find(x => x.id === p.id)) todosPedidos.push(p);
+            localStorage.removeItem('pedidoAtual');
+            abrirDetalhe(p.id);
+          }
+        }
+
+      } catch (err) {
+        console.error('Erro ao carregar pedidos:', err);
+        document.getElementById('msg-lista').textContent = 'Não foi possível carregar os pedidos.';
+      }
+    }
+
+    window.onload = carregarPedidos;
+  </script>
+
 </body>
 </html>
