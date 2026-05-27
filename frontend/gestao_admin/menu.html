@@ -1,48 +1,54 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Cardápio do John</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style_menu.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Cardápio - Mr. John Sports Bar</title>
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23C5392B'/><text x='50%25' y='70%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia, serif' font-weight='900' font-style='italic' font-size='40' fill='%23F2E5D0'>J</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Bagel+Fat+One&family=Caveat+Brush&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared.css">
+  <link rel="stylesheet" href="style_menu.css">
 </head>
 <body>
 
-    <header>
-        <div class="header-inner">
-            <h1>PAINEL ADMIN - Mr. John Sports Bar</h1>
-            <nav class="admin-nav">
-                <span id="nomeUsuario" class="usuario-nome"></span>
-                <a href="menu.html" class="nav-link active">Cardápio</a>
-                <a href="painel_pedidos.html" class="nav-link">Pedidos</a>
-                <button onclick="logout()" class="btn-logout">Sair</button>
-            </nav>
-        </div>
-    </header>
+  <header>
+    <div class="header-inner">
+      <img src="../assets/logo-mrjohn.webp" alt="Logo Mr. John Sports Bar" class="header-logo">
+      <h1>Painel Admin</h1>
+      <nav class="admin-nav">
+        <span id="nomeUsuario" class="usuario-nome"></span>
+        <a href="menu.html" class="nav-link active">Cardápio</a>
+        <a href="painel_pedidos.html" class="nav-link">Pedidos</a>
+        <button onclick="logout()" class="btn-logout">Sair</button>
+      </nav>
+    </div>
+  </header>
 
-    <div class="container">
-        <div class="controls">
-            <input id="nomeInput" placeholder="Nome do produto">
-            <input id="descInput" placeholder="Descrição">
-            <input id="precoInput" placeholder="Preço (Ex: 25.90)">
-            <input id="fotoInput" placeholder="URL da Foto">
-            
-            <select id="catInput">
-                <option value="">Categoria...</option>
-                <option value="1">1 - Burguers</option> 
-                <option value="2">2 - Porções</option> 
-                <option value="3">3 - Bebidas</option> 
-            </select>
-            
-            <button id="btnSalvar" onclick="cadastrarNoJava()">Salvar</button>
-        </div>
+  <div class="container">
+    <div class="controls">
+      <input id="nomeInput" placeholder="Nome do produto">
+      <input id="descInput" placeholder="Descrição">
+      <input id="precoInput" placeholder="Preço (Ex: 25.90)">
+      <input id="fotoInput" placeholder="URL da Foto">
 
-        <div class="menu" id="menuLista"></div>
+      <select id="catInput">
+        <option value="">Categoria...</option>
+        <option value="1">1 - Burguers</option>
+        <option value="2">2 - Porções</option>
+        <option value="3">3 - Bebidas</option>
+      </select>
+
+      <button id="btnSalvar" onclick="cadastrarNoJava()">Salvar</button>
     </div>
 
-    <script src="../config.js"></script>
-    <script src="../auth.js"></script>
-    <script src="script_menu.js"></script>
+    <div class="menu" id="menuLista"></div>
+  </div>
+
+  <script src="../config.js"></script>
+  <script src="../auth.js"></script>
+  <script src="../shared.js"></script>
+  <script src="script_menu.js"></script>
 </body>
 </html>

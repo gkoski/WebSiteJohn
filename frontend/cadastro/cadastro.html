@@ -4,70 +4,65 @@
   <meta charset="UTF-8">
   <title>Cadastro - Mr. John Sports Bar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23C5392B'/><text x='50%25' y='70%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia, serif' font-weight='900' font-style='italic' font-size='40' fill='%23F2E5D0'>J</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Bagel+Fat+One&family=Caveat+Brush&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared.css">
   <link rel="stylesheet" href="cadastro.css">
-
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
 <div class="container">
-
   <div class="logo">
-    <img src="https://painel.lipplead.com/wp-content/uploads/2026/03/sem20fundo202062201_converted.webp">
+    <img src="../assets/logo-mrjohn.webp" alt="Logo Mr. John Sports Bar">
   </div>
+
   <div class="card">
-  
     <h2>Cadastro</h2>
 
-   <form id="form">
+    <form id="form">
+      <div class="input-group" id="nomeGroup">
+        <input type="text" id="nome" placeholder="Nome">
+        <div class="error">Nome obrigatório</div>
+      </div>
 
-  <div class="input-group" id="nomeGroup">
+      <div class="input-group" id="cpfGroup">
+        <input type="text" id="cpf" placeholder="CPF">
+        <div class="error">CPF inválido</div>
+      </div>
 
-    <input type="text" id="nome" placeholder="Nome">
-    <div class="error">Nome obrigatório</div>
+      <div class="input-group" id="emailGroup">
+        <input type="email" id="email" placeholder="E-mail">
+        <div class="error">E-mail inválido</div>
+      </div>
+
+      <div class="input-group" id="senhaGroup">
+        <input type="password" id="senha" placeholder="Senha">
+        <div class="error">Mínimo 6 caracteres</div>
+      </div>
+
+      <div class="input-group" id="confirmarSenhaGroup">
+        <input type="password" id="confirmarSenha" placeholder="Confirmar senha">
+        <div class="error">As senhas não coincidem</div>
+      </div>
+
+      <div class="terms">
+        <input type="checkbox" id="termos">
+        <label for="termos">Aceito os termos</label>
+      </div>
+
+      <button type="submit">Cadastrar</button>
+    </form>
+
+    <div class="terms" style="justify-content: center; margin-top: 20px;">
+      <span>Já tem uma conta? <a href="../login/login.html">Faça seu login</a></span>
+    </div>
   </div>
+</div>
 
-  <div class="input-group" id="cpfGroup">
-    <input type="text" id="cpf" placeholder="CPF">
-    <div class="error">CPF inválido</div>
-  </div>
-
-  <div class="input-group" id="emailGroup">
-    <input type="email" id="email" placeholder="E-mail">
-    <div class="error">E-mail inválido</div>
-  </div>
-
-  <div class="input-group" id="senhaGroup">
-    <input type="password" id="senha" placeholder="Senha">
-    <div class="error">Mínimo 6 caracteres</div>
-  </div>
-
-  <div class="input-group" id="confirmarSenhaGroup">
-    <input type="password" id="confirmarSenha" placeholder="Confirmar senha">
-    <div class="error">As senhas não coincidem</div>
-  </div>
-
-  <div class="terms">
-    <input type="checkbox" id="termos">
-    <label for="termos">Aceito os termos</label>
-  </div>
-
-  <button type="submit">Cadastrar</button>
-
-</form>
-
-  <div class="terms" style="justify-content: center; margin-top: 20px;">
-    <span>Já tem uma conta? <a href="../login/login.html" style="color: #e50914; text-decoration: none; font-weight: 600;">Faça seu login</a></span>
-  </div>
-
-</form>
-  </div>
-
-  <script src="../config.js"></script>
-  <script src="cadastro.js"></script>
-
+<script src="../config.js"></script>
+<script src="../shared.js"></script>
+<script src="cadastro.js"></script>
 </body>
 </html>

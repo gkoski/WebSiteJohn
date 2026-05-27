@@ -1,34 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="checkout.css"> 
-    <title>Checkout</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Mr. John Sports Bar</title>
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23C5392B'/><text x='50%25' y='70%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia, serif' font-weight='900' font-style='italic' font-size='40' fill='%23F2E5D0'>J</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Bagel+Fat+One&family=Caveat+Brush&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared.css">
+  <link rel="stylesheet" href="checkout.css">
 </head>
 <body>
-    <div class="container">
-  <h2>Resumo do Pedido</h2>
 
-  <div id="lista-itens"></div>
+  <header>
+    <div class="header-inner">
+      <img src="../assets/logo-mrjohn.webp" alt="Logo Mr. John Sports Bar" class="header-logo">
+      <h1>Checkout</h1>
+    </div>
+  </header>
 
-  <div class="total">
-    Total: R$ <span id="total">0.00</span>
+  <div class="container">
+    <h2>Resumo do Pedido</h2>
+
+    <div id="lista-itens"></div>
+
+    <div class="total">
+      Total: R$ <span id="total">0,00</span>
+    </div>
+
+    <h3>Endereço de Entrega</h3>
+    <input type="text" id="endereco" placeholder="Digite seu endereço completo">
+
+    <h3>Observações</h3>
+    <textarea id="observacoes" rows="3" placeholder="Ex: sem cebola, entregar na portaria..."></textarea>
+
+    <button onclick="finalizarPedido()">Confirmar Pedido</button>
   </div>
 
-  <h3>Endereço de Entrega</h3>
-  <input type="text" id="endereco" placeholder="Digite seu endereço completo">
-
-  <h3>Observações</h3>
-  <textarea id="observacoes" rows="3" placeholder="Ex: sem cebola, entregar na portaria..."></textarea>
-
-  <button onclick="finalizarPedido()">Confirmar Pedido</button>
-
-  
-</div>
-
-<script src="../config.js"></script>
-<script src="checkout.js"></script>
-
+  <script src="../config.js"></script>
+  <script src="../shared.js"></script>
+  <script src="checkout.js"></script>
 </body>
 </html>

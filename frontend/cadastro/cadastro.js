@@ -12,14 +12,12 @@ form.addEventListener("submit", function(e) {
   const confirmarSenha = document.getElementById("confirmarSenha");
   const termos = document.getElementById("termos");
 
-  // Limpar erros anteriores
   document.querySelectorAll(".input-group").forEach(group => {
     group.classList.remove("input-error");
     const errorSpan = group.querySelector(".error");
     if (errorSpan) errorSpan.style.display = "none";
   });
 
-  // Validações
   if (!nome.value.trim()) {
     showError("nomeGroup");
     valid = false;
@@ -47,7 +45,7 @@ form.addEventListener("submit", function(e) {
   }
 
   if (!termos.checked) {
-    alert("Você precisa aceitar os termos");
+    showToast("Você precisa aceitar os termos.", 'warning');
     valid = false;
   }
 
@@ -71,24 +69,26 @@ form.addEventListener("submit", function(e) {
 
         const usuarioCriado = await response.json();
 
-          localStorage.setItem('usuarioLogado', JSON.stringify({
+        localStorage.setItem('usuarioLogado', JSON.stringify({
           id: usuarioCriado.id,
           nome: usuarioCriado.nome,
           email: usuarioCriado.email
         }));
 
-        alert("Show! Usuário cadastrado com sucesso.");
+        showToast("Cadastro realizado com sucesso!", 'success');
         form.reset();
 
-        window.location.href = "../cardapio/cardapio.html"; 
+        setTimeout(() => {
+          window.location.href = "../cardapio/cardapio.html";
+        }, 800);
 
       } else {
-        alert("Erro no servidor: " + response.status);
+        showToast("Erro no servidor: " + response.status, 'error');
       }
     })
     .catch(error => {
       console.error("Erro de conexão:", error);
-      alert("O servidor Java parece estar desligado!");
+      showToast("O servidor parece estar desligado!", 'error');
     });
   }
 });

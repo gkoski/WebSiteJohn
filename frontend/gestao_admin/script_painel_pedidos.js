@@ -114,12 +114,7 @@ function isHoje(iso) {
     return d.toDateString() === hoje.toDateString();
 }
 
-function showToast(msg, tipo = '') {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.className = 'toast show ' + tipo;
-    setTimeout(() => el.classList.remove('show'), 2400);
-}
+// showToast vem de shared.js
 
 // ------------------------------------------------------------
 // Render

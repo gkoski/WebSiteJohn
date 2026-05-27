@@ -7,14 +7,12 @@ form.addEventListener("submit", function(e) {
   const email = document.getElementById("email");
   const senha = document.getElementById("senha");
 
-  // Limpar erros anteriores (mantendo seu padrão)
   document.querySelectorAll(".input-group").forEach(group => {
     group.classList.remove("input-error");
     const errorSpan = group.querySelector(".error");
     if (errorSpan) errorSpan.style.display = "none";
   });
 
-  // Validação simples de front-end
   if (!email.value.includes("@")) {
     showError("emailGroup");
     valid = false;
@@ -40,7 +38,6 @@ form.addEventListener("submit", function(e) {
       if (response.ok) {
         const usuarioLogado = await response.json();
 
-        // Salvando os dados no localStorage para usar no PedidoController depois
         localStorage.setItem('usuarioLogado', JSON.stringify({
           id: usuarioLogado.id,
           nome: usuarioLogado.nome,
@@ -49,27 +46,29 @@ form.addEventListener("submit", function(e) {
           token: usuarioLogado.token
         }));
 
-        alert(`E aí, ${usuarioLogado.nome}! Login feito com sucesso.`);
-        if (usuarioLogado.role === 'ADMIN') {
+        showToast(`E aí, ${usuarioLogado.nome}! Login feito com sucesso.`, 'success');
+
+        setTimeout(() => {
+          if (usuarioLogado.role === 'ADMIN') {
             window.location.href = "../gestao_admin/menu.html";
-        } else {
+          } else {
             window.location.href = "../cardapio/cardapio.html";
-        }
+          }
+        }, 800);
 
       } else if (response.status === 401) {
-        alert("E-mail ou senha incorretos.");
+        showToast("E-mail ou senha incorretos.", 'error');
       } else {
-        alert("Erro no servidor: " + response.status);
+        showToast("Erro no servidor: " + response.status, 'error');
       }
     })
     .catch(error => {
       console.error("Erro de conexão:", error);
-      alert("O servidor Java parece estar desligado!");
+      showToast("O servidor parece estar desligado!", 'error');
     });
   }
 });
 
-// Sua função de erro original
 function showError(groupId) {
   const group = document.getElementById(groupId);
   if (group) {
