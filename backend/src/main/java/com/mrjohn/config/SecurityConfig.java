@@ -66,6 +66,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/categorias").permitAll()
                         .requestMatchers(HttpMethod.GET, "/categorias/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/entrega/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/upload/**").hasRole("ADMIN")
 
                         // Swagger
                         .requestMatchers(
