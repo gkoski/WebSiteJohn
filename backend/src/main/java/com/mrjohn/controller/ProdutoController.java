@@ -81,4 +81,8 @@ public class ProdutoController {
 
         produtoRepository.deleteById(id);
     }
+	@GetMapping("/categoria/{id}")
+	public ResponseEntity<List<Produto>> getByCategoriaId(@PathVariable Long id) {
+		return ResponseEntity.ok(produtoRepository.findByCategoriaIdOrderByIdAsc(id));
+	}
 }
