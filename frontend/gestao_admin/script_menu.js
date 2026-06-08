@@ -1,5 +1,15 @@
 const API_URL = CONFIG.url('produtos');
 let idProdutoEmEdicao = null;
+let fotoAtual = ''; // foto já existente do produto em edição (caso nenhuma nova seja enviada)
+
+// Resolve o caminho da foto: URLs completas ficam como estão;
+// caminhos relativos (/uploads/...) recebem o host da API.
+function resolverFotoUrl(foto) {
+    if (!foto) return 'https://via.placeholder.com/300x160?text=Sem+Foto';
+    if (/^https?:\/\//i.test(foto)) return foto;
+    if (foto.startsWith('/')) return CONFIG.API_URL + foto;
+    return foto;
+}
 
 async function listarProdutos() {
     try {
@@ -17,7 +27,7 @@ async function listarProdutos() {
 
                 lista.innerHTML += `
                     <div class="card">
-                        <img src="${p.foto || 'https://via.placeholder.com/300x160?text=Sem+Foto'}"
+                        <img src="${resolverFotoUrl(p.foto)}"
                              alt="${p.nome || 'Produto do cardápio'}"
                              onerror="this.src='https://via.placeholder.com/300x160?text=Sem+Foto'">
                         <div class="card-content">
@@ -45,16 +55,27 @@ async function listarProdutos() {
 
 function prepararEdicao(id, nome, descricao, preco, foto, categoriaId) {
     idProdutoEmEdicao = id;
+    fotoAtual = foto || '';
 
     document.getElementById('nomeInput').value = nome;
     document.getElementById('descInput').value = descricao;
     document.getElementById('precoInput').value = preco;
-    document.getElementById('fotoInput').value = foto;
     document.getElementById('catInput').value = categoriaId;
+
+    // Limpa qualquer arquivo escolhido e mostra a foto atual no preview
+    const fotoInput = document.getElementById('fotoInput');
+    if (fotoInput) fotoInput.value = '';
+    if (fotoAtual) {
+        mostrarPreview(resolverFotoUrl(fotoAtual), 'Foto atual');
+    } else {
+        esconderPreview();
+    }
 
     const btn = document.getElementById('btnSalvar');
     btn.innerText = "Atualizar";
-    btn.style.background = "var(--blue)";
+    btn.style.background = "var(--orange)";
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 async function cadastrarNoJava() {
@@ -67,11 +88,37 @@ async function cadastrarNoJava() {
         return;
     }
 
+    const btn = document.getElementById('btnSalvar');
+    const fotoInput = document.getElementById('fotoInput');
+    const arquivo = fotoInput && fotoInput.files ? fotoInput.files[0] : null;
+
+    // Define a foto: nova (upload) tem prioridade; senão mantém a atual em edição.
+    let fotoUrl = fotoAtual || '';
+
+    if (arquivo) {
+        if (!arquivo.type.startsWith('image/')) {
+            showToast("Selecione um arquivo de imagem válido.", 'warning');
+            return;
+        }
+        try {
+            btn.disabled = true;
+            const textoOriginal = btn.innerText;
+            btn.innerText = "Enviando foto…";
+            fotoUrl = await uploadFoto(arquivo);
+            btn.innerText = textoOriginal;
+        } catch (e) {
+            btn.disabled = false;
+            showToast("Falha ao enviar a foto.", 'error');
+            return;
+        }
+        btn.disabled = false;
+    }
+
     const produtoObj = {
         nome: nome,
         descricao: document.getElementById('descInput').value,
         preco: parseFloat(preco.toString().replace(',', '.')),
-        foto: document.getElementById('fotoInput').value,
+        foto: fotoUrl,
         categoria: { id: parseInt(categoriaId) }
     };
 
@@ -97,6 +144,26 @@ async function cadastrarNoJava() {
     }
 }
 
+// Envia o arquivo ao endpoint /upload/foto e devolve a URL completa da imagem.
+async function uploadFoto(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
+    const token = usuario && usuario.token ? usuario.token : null;
+
+    const res = await fetch(CONFIG.url('/upload/foto'), {
+        method: 'POST',
+        // Sem Content-Type manual: o navegador define o boundary do multipart.
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+        body: formData
+    });
+
+    if (!res.ok) throw new Error('Upload falhou: ' + res.status);
+    const data = await res.json();
+    return CONFIG.API_URL + data.url; // ex.: http://localhost:8080/uploads/arquivo.jpg
+}
+
 async function deletarDoBanco(id) {
     if (!confirm("Tem certeza que deseja excluir?")) return;
     try {
@@ -113,10 +180,13 @@ async function deletarDoBanco(id) {
 
 function cancelarEdicao() {
     idProdutoEmEdicao = null;
+    fotoAtual = '';
     document.getElementById('nomeInput').value = '';
     document.getElementById('descInput').value = '';
     document.getElementById('precoInput').value = '';
-    document.getElementById('fotoInput').value = '';
+    const fotoInput = document.getElementById('fotoInput');
+    if (fotoInput) fotoInput.value = '';
+    esconderPreview();
     document.getElementById('catInput').value = '';
 
     const btn = document.getElementById('btnSalvar');
@@ -124,8 +194,58 @@ function cancelarEdicao() {
     btn.style.background = "var(--red)";
 }
 
+// --- Preview da foto ---
+function mostrarPreview(src, texto) {
+    const wrap = document.getElementById('fotoPreviewWrap');
+    const img = document.getElementById('fotoPreview');
+    const campo = document.getElementById('uploadField');
+    const txt = document.getElementById('uploadText');
+    if (img) img.src = src;
+    if (wrap) wrap.style.display = 'block';
+    if (campo) campo.classList.add('has-file');
+    if (txt && texto) txt.textContent = texto;
+}
+
+function esconderPreview() {
+    const wrap = document.getElementById('fotoPreviewWrap');
+    const campo = document.getElementById('uploadField');
+    const txt = document.getElementById('uploadText');
+    if (wrap) wrap.style.display = 'none';
+    if (campo) campo.classList.remove('has-file');
+    if (txt) txt.textContent = 'Foto do produto';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     if (!CONFIG.checkAdmin()) return;
     document.getElementById('nomeUsuario').textContent = getNomeUsuario();
+
+    const fotoInput = document.getElementById('fotoInput');
+    if (fotoInput) {
+        fotoInput.addEventListener('change', () => {
+            const arquivo = fotoInput.files && fotoInput.files[0];
+            if (!arquivo) {
+                // Voltou a vazio: mostra a foto atual (edição) ou esconde
+                if (fotoAtual) mostrarPreview(resolverFotoUrl(fotoAtual), 'Foto atual');
+                else esconderPreview();
+                return;
+            }
+            if (!arquivo.type.startsWith('image/')) {
+                showToast("Selecione um arquivo de imagem.", 'warning');
+                fotoInput.value = '';
+                return;
+            }
+            mostrarPreview(URL.createObjectURL(arquivo), arquivo.name);
+        });
+    }
+
+    const removerFoto = document.getElementById('removerFoto');
+    if (removerFoto) {
+        removerFoto.addEventListener('click', () => {
+            if (fotoInput) fotoInput.value = '';
+            fotoAtual = '';
+            esconderPreview();
+        });
+    }
+
     listarProdutos();
 });
