@@ -1,13 +1,16 @@
 // ============================================================
 // PAINEL DE PEDIDOS — Mr. John Sports Bar
-// Lista, filtra e avança status dos pedidos.
+// Kanban com colunas por status. Arraste o card de um pedido
+// entre as colunas (HTML5 Drag and Drop API) para mudar o status.
 // Faz fetch em CONFIG.url('pedidos'); se a API falhar, usa
 // pedidos-mock pra a interface seguir visível em dev.
 // ============================================================
 
 const API_URL = (typeof CONFIG !== 'undefined') ? CONFIG.url('pedidos') : '/pedidos';
 
-const STATUS_ORDER = ['RECEBIDO', 'PREPARANDO', 'ENVIADO', 'ENTREGUE'];
+// Colunas do kanban (ordem da esquerda para a direita)
+const STATUS_COLUMNS = ['RECEBIDO', 'PREPARANDO', 'ENVIADO', 'ENTREGUE', 'CANCELADO'];
+
 const STATUS_LABEL = {
     RECEBIDO:   'Recebido',
     PREPARANDO: 'Preparando',
@@ -15,14 +18,8 @@ const STATUS_LABEL = {
     ENTREGUE:   'Entregue',
     CANCELADO:  'Cancelado'
 };
-const STATUS_NEXT_LABEL = {
-    RECEBIDO:   'Iniciar preparo',
-    PREPARANDO: 'Marcar enviado',
-    ENVIADO:    'Marcar entregue'
-};
 
 let pedidos = [];
-let filtroAtual = '';
 let buscaAtual = '';
 
 // ------------------------------------------------------------
@@ -102,11 +99,6 @@ function statusLabel(status) {
     return STATUS_LABEL[status] || status;
 }
 
-function proximoStatus(atual) {
-    const i = STATUS_ORDER.indexOf(atual);
-    return (i >= 0 && i < STATUS_ORDER.length - 1) ? STATUS_ORDER[i + 1] : null;
-}
-
 function isHoje(iso) {
     if (!iso) return false;
     const d = new Date(iso);
@@ -114,109 +106,164 @@ function isHoje(iso) {
     return d.toDateString() === hoje.toDateString();
 }
 
+function pedidoMatchesBusca(p) {
+    if (!buscaAtual) return true;
+    const q = buscaAtual.toLowerCase();
+    const nome = (p.usuario?.nome || '').toLowerCase();
+    const idStr = String(p.id || '');
+    return nome.includes(q) || idStr.includes(q);
+}
+
 // showToast vem de shared.js
 
 // ------------------------------------------------------------
-// Render
+// Render — KPIs
 // ------------------------------------------------------------
 function atualizarKPIs() {
     const hoje = pedidos.filter(p => isHoje(p.dataPedido));
     const preparo = pedidos.filter(p => p.status === 'PREPARANDO').length;
     const prontos = pedidos.filter(p => p.status === 'ENVIADO').length;
-    const faturamento = hoje
-        .filter(p => p.status !== 'CANCELADO')
-        .reduce((acc, p) => acc + Number(p.valorTotal || 0), 0);
 
-    document.getElementById('kpi-total').textContent = hoje.length;
-    document.getElementById('kpi-preparo').textContent = preparo;
-    document.getElementById('kpi-prontos').textContent = prontos;
-    document.getElementById('kpi-faturamento').textContent = formatarMoeda(faturamento);
+    const elTotal = document.getElementById('kpi-total');
+    const elPreparo = document.getElementById('kpi-preparo');
+    const elProntos = document.getElementById('kpi-prontos');
+    if (elTotal)   elTotal.textContent = hoje.length;
+    if (elPreparo) elPreparo.textContent = preparo;
+    if (elProntos) elProntos.textContent = prontos;
 }
 
-function pedidoMatchesFiltro(p) {
-    if (filtroAtual && p.status !== filtroAtual) return false;
-    if (buscaAtual) {
-        const q = buscaAtual.toLowerCase();
-        const nome = (p.usuario?.nome || '').toLowerCase();
-        const idStr = String(p.id || '');
-        if (!nome.includes(q) && !idStr.includes(q)) return false;
-    }
-    return true;
+// ------------------------------------------------------------
+// Render — Kanban
+// ------------------------------------------------------------
+function cardPedidoHTML(p) {
+    const status = (p.status || 'RECEBIDO').toUpperCase();
+    const itensHtml = (p.itens || []).map(it => {
+        const nome = it.produto?.nome || it.nomeProduto || it.nome || 'Produto';
+        const preco = (it.precoUnitario || it.preco || 0) * (it.quantidade || 1);
+        return `
+            <li>
+                <span class="qtd-badge">${it.quantidade}x</span>
+                <span class="item-nome">${nome}</span>
+                <span class="item-preco">${formatarMoeda(preco)}</span>
+            </li>`;
+    }).join('');
+
+    return `
+        <article class="card-pedido" data-id="${p.id}" draggable="true">
+            <div class="pedido-header">
+                <div class="pedido-id">Pedido <span>#${String(p.id).padStart(4, '0')}</span></div>
+                <span class="drag-handle" title="Arraste para mover">⠿</span>
+            </div>
+            <div class="pedido-body">
+                <div class="cliente-info">
+                    <span class="cliente-nome">${p.usuario?.nome || 'Cliente'}</span>
+                    <span class="cliente-email">${p.usuario?.email || ''}</span>
+                </div>
+                <ul class="itens">${itensHtml}</ul>
+            </div>
+            <div class="pedido-total">
+                <span class="label">Total</span>
+                <span class="valor">${formatarMoeda(p.valorTotal)}</span>
+            </div>
+            <div class="pedido-hora" style="padding: 8px 16px 14px; text-align:right;">
+                ${formatarHora(p.dataPedido)}
+            </div>
+        </article>`;
 }
 
-function renderPedidos() {
-    const lista = document.getElementById('pedidosLista');
-    const visiveis = pedidos.filter(pedidoMatchesFiltro);
+function renderKanban() {
+    const board = document.getElementById('kanbanBoard');
+    if (!board) return;
 
-    if (visiveis.length === 0) {
-        lista.innerHTML = '<p class="empty-msg">Nenhum pedido encontrado.</p>';
-        return;
-    }
+    const visiveis = pedidos.filter(pedidoMatchesBusca);
 
-    lista.innerHTML = visiveis.map(p => {
-        const status = (p.status || 'RECEBIDO').toUpperCase();
-        const proximo = proximoStatus(status);
-        const podeCancelar = status !== 'ENTREGUE' && status !== 'CANCELADO';
-        const itensHtml = (p.itens || []).map(it => {
-            const nome = it.produto?.nome || it.nomeProduto || it.nome || 'Produto';
-            const preco = (it.precoUnitario || it.preco || 0) * (it.quantidade || 1);
-            return `
-                <li>
-                    <span class="qtd-badge">${it.quantidade}x</span>
-                    <span class="item-nome">${nome}</span>
-                    <span class="item-preco">${formatarMoeda(preco)}</span>
-                </li>
-            `;
-        }).join('');
+    board.innerHTML = STATUS_COLUMNS.map(status => {
+        const doStatus = visiveis.filter(p => (p.status || 'RECEBIDO').toUpperCase() === status);
+        const cards = doStatus.length
+            ? doStatus.map(cardPedidoHTML).join('')
+            : '<div class="kanban-empty">Solte pedidos aqui</div>';
 
         return `
-            <article class="card-pedido" data-id="${p.id}">
-                <div class="pedido-header">
-                    <div class="pedido-id">Pedido <span>#${String(p.id).padStart(4, '0')}</span></div>
-                    <span class="status-badge ${status.toLowerCase()}">${statusLabel(status)}</span>
+            <div class="kanban-col" data-status="${status}">
+                <div class="kanban-col-head">
+                    <span class="kanban-col-title">${statusLabel(status)}</span>
+                    <span class="kanban-col-count">${doStatus.length}</span>
                 </div>
-                <div class="pedido-body">
-                    <div class="cliente-info">
-                        <span class="cliente-nome">${p.usuario?.nome || 'Cliente'}</span>
-                        <span class="cliente-email">${p.usuario?.email || ''}</span>
-                    </div>
-                    <ul class="itens">${itensHtml}</ul>
+                <div class="kanban-col-body" data-status="${status}">
+                    ${cards}
                 </div>
-                <div class="pedido-total">
-                    <span class="label">Total</span>
-                    <span class="valor">${formatarMoeda(p.valorTotal)}</span>
-                </div>
-                <div class="pedido-acoes">
-                    <button class="btn-acao btn-avancar"
-                            ${proximo ? '' : 'disabled'}
-                            onclick="avancarStatus(${p.id})">
-                        ${proximo ? (STATUS_NEXT_LABEL[status] || 'Avançar') : 'Finalizado'}
-                    </button>
-                    <button class="btn-acao btn-cancelar"
-                            ${podeCancelar ? '' : 'disabled'}
-                            onclick="cancelarPedido(${p.id})">
-                        ${podeCancelar ? 'Cancelar' : '—'}
-                    </button>
-                </div>
-                <div class="pedido-hora" style="padding: 8px 16px 14px; text-align:right;">
-                    ${formatarHora(p.dataPedido)}
-                </div>
-            </article>
-        `;
+            </div>`;
     }).join('');
+
+    ativarDragAndDrop();
 }
 
 function renderTudo() {
     atualizarKPIs();
-    renderPedidos();
+    renderKanban();
+}
+
+// ------------------------------------------------------------
+// Drag and Drop (HTML5)
+// ------------------------------------------------------------
+let pedidoArrastadoId = null;
+
+function ativarDragAndDrop() {
+    const cards = document.querySelectorAll('.card-pedido[draggable="true"]');
+    cards.forEach(card => {
+        card.addEventListener('dragstart', (e) => {
+            pedidoArrastadoId = Number(card.dataset.id);
+            card.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', card.dataset.id);
+        });
+        card.addEventListener('dragend', () => {
+            card.classList.remove('dragging');
+            pedidoArrastadoId = null;
+            document.querySelectorAll('.kanban-col, .kanban-col-body')
+                .forEach(el => el.classList.remove('drag-over'));
+        });
+    });
+
+    const colunas = document.querySelectorAll('.kanban-col');
+    colunas.forEach(col => {
+        const body = col.querySelector('.kanban-col-body');
+
+        col.addEventListener('dragover', (e) => {
+            e.preventDefault(); // necessário para permitir o drop
+            e.dataTransfer.dropEffect = 'move';
+            col.classList.add('drag-over');
+            if (body) body.classList.add('drag-over');
+        });
+
+        col.addEventListener('dragleave', (e) => {
+            // só remove o realce se realmente saiu da coluna
+            if (!col.contains(e.relatedTarget)) {
+                col.classList.remove('drag-over');
+                if (body) body.classList.remove('drag-over');
+            }
+        });
+
+        col.addEventListener('drop', (e) => {
+            e.preventDefault();
+            col.classList.remove('drag-over');
+            if (body) body.classList.remove('drag-over');
+
+            const novoStatus = col.dataset.status;
+            const id = pedidoArrastadoId || Number(e.dataTransfer.getData('text/plain'));
+            if (id && novoStatus) {
+                mudarStatus(id, novoStatus);
+            }
+        });
+    });
 }
 
 // ------------------------------------------------------------
 // API
 // ------------------------------------------------------------
 async function listarPedidos() {
-    const lista = document.getElementById('pedidosLista');
-    lista.innerHTML = '<p class="empty-msg">Atualizando…</p>';
+    const board = document.getElementById('kanbanBoard');
+    if (board) board.innerHTML = '<p class="empty-msg">Atualizando…</p>';
 
     try {
         const res = await fetch(API_URL);
@@ -233,50 +280,28 @@ async function listarPedidos() {
     }
 }
 
-async function avancarStatus(id) {
+// Muda o status de um pedido (usado pelo drag and drop).
+async function mudarStatus(id, novoStatus) {
     const pedido = pedidos.find(p => p.id === id);
     if (!pedido) return;
 
-    const proximo = proximoStatus((pedido.status || '').toUpperCase());
-    if (!proximo) return;
+    const atual = (pedido.status || '').toUpperCase();
+    if (atual === novoStatus) return; // soltou na mesma coluna
 
-    const original = pedido.status;
-    pedido.status = proximo; // otimista
+    pedido.status = novoStatus; // atualização otimista
     renderTudo();
 
     try {
         const res = await fetch(`${CONFIG.API_URL}/pedidos/${id}/status`, {
             method: 'PATCH',
             headers: CONFIG.getAuthHeaders(),
-            body: JSON.stringify({ novoStatus: proximo })
+            body: JSON.stringify({ novoStatus: novoStatus })
         });
         if (!res.ok) throw new Error('HTTP ' + res.status);
-        showToast(`Pedido #${id} → ${statusLabel(proximo)}`, 'success');
+        showToast(`Pedido #${id} → ${statusLabel(novoStatus)}`, 'success');
     } catch (err) {
         // mock-mode: mantém a alteração só localmente
-        showToast(`Pedido #${id} → ${statusLabel(proximo)} (offline)`, '');
-    }
-}
-
-async function cancelarPedido(id) {
-    if (!confirm(`Cancelar o pedido #${id}?`)) return;
-
-    const pedido = pedidos.find(p => p.id === id);
-    if (!pedido) return;
-
-    pedido.status = 'CANCELADO';
-    renderTudo();
-
-    try {
-        const res = await fetch(`${CONFIG.API_URL}/pedidos/${id}/status`, {
-            method: 'PATCH',
-            headers: CONFIG.getAuthHeaders(),
-            body: JSON.stringify({ novoStatus: 'CANCELADO' })
-        });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        showToast(`Pedido #${id} cancelado`, 'error');
-    } catch (err) {
-        showToast(`Pedido #${id} cancelado (offline)`, '');
+        showToast(`Pedido #${id} → ${statusLabel(novoStatus)} (offline)`, '');
     }
 }
 
@@ -284,21 +309,13 @@ async function cancelarPedido(id) {
 // Eventos
 // ------------------------------------------------------------
 function inicializarEventos() {
-    const grupo = document.getElementById('filtroStatus');
-    grupo.addEventListener('click', (e) => {
-        const btn = e.target.closest('.chip');
-        if (!btn) return;
-        grupo.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-        btn.classList.add('active');
-        filtroAtual = btn.dataset.status || '';
-        renderPedidos();
-    });
-
     const busca = document.getElementById('buscaInput');
-    busca.addEventListener('input', (e) => {
-        buscaAtual = e.target.value.trim();
-        renderPedidos();
-    });
+    if (busca) {
+        busca.addEventListener('input', (e) => {
+            buscaAtual = e.target.value.trim();
+            renderKanban();
+        });
+    }
 }
 
 // ------------------------------------------------------------
