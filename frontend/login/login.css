@@ -92,7 +92,47 @@ h2 {
   border: 2px solid var(--red);
 }
 
-button {
+/* --- Campo de senha com botão ver/ocultar --- */
+.senha-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.senha-wrap input {
+  padding-right: 46px;
+}
+
+.toggle-senha {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.toggle-senha:hover {
+  color: var(--orange);
+  background: rgba(240, 144, 48, 0.10);
+}
+
+.toggle-senha:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+
+button[type="submit"] {
   position: relative;
   width: 100%;
   padding: 14px;
@@ -109,13 +149,13 @@ button {
   box-shadow: 0 8px 24px -6px rgba(225,29,42,.5);
 }
 
-button:hover {
+button[type="submit"]:hover {
   background: var(--red-bright);
   transform: translateY(-3px);
   box-shadow: 0 12px 30px -6px rgba(225,29,42,.6);
 }
 
-button:active {
+button[type="submit"]:active {
   transform: translateY(-1px) scale(0.98);
 }
 
