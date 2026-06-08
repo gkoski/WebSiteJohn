@@ -28,7 +28,7 @@ header {
    ============================================================ */
 .kpis {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 
@@ -171,12 +171,119 @@ header {
 }
 
 /* ============================================================
-   GRID DE PEDIDOS
+   KANBAN DE PEDIDOS
    ============================================================ */
-.pedidos {
+.kanban {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(300px, 1fr);
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  align-items: start;
+}
+
+.kanban-col {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  transition: background 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+.kanban-col-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+}
+
+.kanban-col-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-dim);
+}
+
+.kanban-col-title::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.kanban-col[data-status="RECEBIDO"]   .kanban-col-title { color: var(--gold); }
+.kanban-col[data-status="PREPARANDO"] .kanban-col-title { color: var(--orange); }
+.kanban-col[data-status="ENVIADO"]    .kanban-col-title { color: var(--orange-bright); }
+.kanban-col[data-status="ENTREGUE"]   .kanban-col-title { color: var(--green); }
+.kanban-col[data-status="CANCELADO"]  .kanban-col-title { color: var(--red); }
+
+.kanban-col-count {
+  background: var(--surface-2);
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.kanban-col-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-height: 80px;
+}
+
+/* Realce ao arrastar sobre a coluna */
+.kanban-col.drag-over {
+  background: rgba(240, 144, 48, 0.06);
+  border-color: var(--orange);
+}
+
+.kanban-col-body.drag-over {
+  outline: 2px dashed var(--orange);
+  outline-offset: -6px;
+  border-radius: var(--r);
+}
+
+.kanban-empty {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 24px 8px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+}
+
+/* Cartão arrastável */
+.card-pedido[draggable="true"] {
+  cursor: grab;
+}
+
+.card-pedido.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.card-pedido .drag-handle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  cursor: grab;
 }
 
 .card-pedido {
@@ -416,6 +523,9 @@ header {
   .header-logo { width: 50px; }
   .admin-nav { width: 100%; }
   .filtros-bar { flex-direction: column; align-items: stretch; }
-  .chip-group { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; }
-  .chip { white-space: nowrap; }
+  .kanban {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    grid-template-columns: 1fr;
+  }
 }
