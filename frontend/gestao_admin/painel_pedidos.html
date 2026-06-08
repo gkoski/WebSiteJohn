@@ -46,25 +46,12 @@
         <span class="kpi-label">Prontos</span>
         <span class="kpi-value" id="kpi-prontos">0</span>
       </div>
-      <div class="kpi-card">
-        <span class="kpi-label">Faturamento</span>
-        <span class="kpi-value money" id="kpi-faturamento">R$ 0,00</span>
-      </div>
     </section>
 
     <section class="filtros">
       <h2 class="section-title">Pedidos recebidos</h2>
 
       <div class="filtros-bar">
-        <div class="chip-group" id="filtroStatus">
-          <button class="chip active" data-status="">Todos</button>
-          <button class="chip" data-status="RECEBIDO">Recebidos</button>
-          <button class="chip" data-status="PREPARANDO">Preparando</button>
-          <button class="chip" data-status="ENVIADO">Enviados</button>
-          <button class="chip" data-status="ENTREGUE">Entregues</button>
-          <button class="chip" data-status="CANCELADO">Cancelados</button>
-        </div>
-
         <input id="buscaInput" class="busca" placeholder="Buscar cliente ou nº do pedido…">
 
         <button id="btnAtualizar" class="btn-atualizar" onclick="listarPedidos()">
@@ -73,7 +60,7 @@
       </div>
     </section>
 
-    <section class="pedidos" id="pedidosLista">
+    <section class="kanban" id="kanbanBoard">
       <p class="empty-msg">Carregando pedidos…</p>
     </section>
 
