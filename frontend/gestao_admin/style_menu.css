@@ -48,6 +48,88 @@
   box-shadow: 0 12px 30px -6px rgba(225,29,42,.6);
 }
 
+/* --- Campo de upload de imagem --- */
+.upload-field {
+  flex: 1;
+  min-width: 150px;
+  height: 45px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.25s var(--ease);
+  overflow: hidden;
+}
+
+.upload-field:hover {
+  border-color: var(--orange);
+  color: var(--text);
+}
+
+.upload-field input[type="file"] {
+  display: none;
+}
+
+.upload-field .upload-icon {
+  display: inline-flex;
+  color: var(--orange);
+  flex-shrink: 0;
+}
+
+.upload-field .upload-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.upload-field.has-file {
+  border-style: solid;
+  border-color: var(--red);
+  color: var(--text);
+}
+
+/* --- Preview da foto --- */
+.foto-preview-wrap {
+  position: relative;
+  width: 140px;
+  margin-bottom: 24px;
+}
+
+.foto-preview-wrap img {
+  width: 140px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: var(--r);
+  border: 1px solid var(--border-strong);
+}
+
+.foto-preview-remover {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: var(--red);
+  color: #fff;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  transition: background 0.2s var(--ease);
+}
+
+.foto-preview-remover:hover {
+  background: var(--red-bright);
+}
+
 /* --- Grid de Produtos --- */
 .menu {
   display: grid;
@@ -82,7 +164,7 @@
 .btn-editar {
   flex: 1;
   padding: 10px;
-  background: var(--blue);
+  background: var(--red);
   color: #fff;
   border: none;
   border-radius: 100px;
@@ -93,8 +175,8 @@
 }
 
 .btn-editar:hover {
-  opacity: 0.85;
-  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+  background: var(--red-bright);
+  box-shadow: 0 4px 12px rgba(225, 29, 42, 0.3);
   transform: translateY(-2px);
 }
 
