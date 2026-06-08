@@ -101,3 +101,38 @@ function showError(groupId) {
     if (errorSpan) errorSpan.style.display = "block";
   }
 }
+
+/* --- Modal de Termos de Uso --- */
+(function () {
+  const modal = document.getElementById("termosModal");
+  const abrir = document.getElementById("abrirTermos");
+  const fechar = document.getElementById("fecharTermos");
+  const aceitar = document.getElementById("aceitarTermos");
+  const checkbox = document.getElementById("termos");
+  if (!modal || !abrir) return;
+
+  function abrirModal() {
+    modal.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+  function fecharModal() {
+    modal.hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  abrir.addEventListener("click", abrirModal);
+  fechar.addEventListener("click", fecharModal);
+
+  aceitar.addEventListener("click", () => {
+    if (checkbox) checkbox.checked = true;
+    fecharModal();
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) fecharModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !modal.hidden) fecharModal();
+  });
+})();
