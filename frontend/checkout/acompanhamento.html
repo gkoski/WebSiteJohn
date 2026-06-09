@@ -202,7 +202,9 @@
           return;
         }
 
-        const response = await fetch(CONFIG.url('pedidos') + '/usuario/' + usuarioLogado.id);
+        const response = await fetch(CONFIG.url('pedidos') + '/usuario/' + usuarioLogado.id, {
+          headers: CONFIG.getAuthHeaders()
+        });
         if (!response.ok) throw new Error('Erro ' + response.status);
 
         const pedidos = await response.json();

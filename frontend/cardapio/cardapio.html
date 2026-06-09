@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cardápio - Mr. John Sports Bar</title>
   <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23C5392B'/><text x='50%25' y='70%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia, serif' font-weight='900' font-style='italic' font-size='40' fill='%23F2E5D0'>J</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,27 +25,72 @@
     </div>
   </header>
 
-  <div class="container">
-    <div class="menu" id="menuLista"></div>
-  </div>
+  <nav class="cat-nav" id="catNav">
+    <div class="cat-nav-inner">
+      <a href="#burgers" class="cat-pill active" data-target="burgers">🍔 <span>Burgers</span></a>
+      <a href="#porcoes" class="cat-pill" data-target="porcoes">🍟 <span>Porções</span></a>
+      <a href="#bebidas" class="cat-pill" data-target="bebidas">🍺 <span>Bebidas</span></a>
+    </div>
+  </nav>
 
-  <div id="carrinhoLateral" class="sidebar-carrinho">
+  <main class="container">
+
+    <section class="cat-section" id="burgers" data-cat="1">
+      <div class="cat-section-header">
+        <span class="eyebrow">Os campeões da casa</span>
+        <h3>Burgers <span class="cat-count" id="count-1">0</span></h3>
+        <p>Blend artesanal, pão fresquinho do dia, molhos autorais.</p>
+      </div>
+      <div class="menu" id="menu-1"></div>
+    </section>
+
+    <section class="cat-section" id="porcoes" data-cat="2">
+      <div class="cat-section-header">
+        <span class="eyebrow">Pra dividir na mesa</span>
+        <h3>Porções <span class="cat-count" id="count-2">0</span></h3>
+        <p>Crocante, dourado e bem servido — perfeito pra acompanhar a partida.</p>
+      </div>
+      <div class="menu" id="menu-2"></div>
+    </section>
+
+    <section class="cat-section" id="bebidas" data-cat="3">
+      <div class="cat-section-header">
+        <span class="eyebrow">Pra brindar o jogo</span>
+        <h3>Bebidas <span class="cat-count" id="count-3">0</span></h3>
+        <p>Chopp gelado direto da chopeira, drinks autorais e clássicos.</p>
+      </div>
+      <div class="menu" id="menu-3"></div>
+    </section>
+
+  </main>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleCarrinho()"></div>
+
+  <aside id="carrinhoLateral" class="sidebar-carrinho">
     <div class="sidebar-header">
       <h2>Seu Pedido</h2>
-      <button onclick="toggleCarrinho()" class="btn-fechar">X</button>
+      <button onclick="toggleCarrinho()" class="btn-fechar" aria-label="Fechar carrinho">✕</button>
     </div>
 
-    <div id="itensCarrinhoLateral"></div>
+    <div id="itensCarrinhoLateral" class="sidebar-itens"></div>
 
     <div class="sidebar-footer">
-      <h3 id="totalCarrinho">Total: R$ 0,00</h3>
+      <div class="sidebar-totais">
+        <div class="linha-total destaque">
+          <span>Total</span>
+          <span id="totalCarrinho">R$ 0,00</span>
+        </div>
+      </div>
       <button class="btn-finalizar" onclick="irParaCheckout()">Finalizar Pedido</button>
+      <button class="btn-esvaziar" onclick="esvaziarCarrinho()">Esvaziar carrinho</button>
     </div>
-  </div>
+  </aside>
 
-  <div class="cart-status" onclick="toggleCarrinho()">
-    Itens: <span id="qtd-itens">0</span> | Ver Pedido
-  </div>
+  <button class="cart-status" id="cartStatus" onclick="toggleCarrinho()" aria-label="Abrir carrinho">
+    <span class="cart-icon">🛒</span>
+    <span class="cart-label">Ver pedido</span>
+    <span class="cart-badge" id="qtd-itens">0</span>
+  </button>
 
   <script src="../config.js"></script>
   <script src="../auth.js"></script>

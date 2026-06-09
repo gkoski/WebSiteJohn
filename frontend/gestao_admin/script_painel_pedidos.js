@@ -266,7 +266,9 @@ async function listarPedidos() {
     if (board) board.innerHTML = '<p class="empty-msg">Atualizando…</p>';
 
     try {
-        const res = await fetch(API_URL);
+        const res = await fetch(API_URL, {
+            headers: CONFIG.getAuthHeaders()
+        });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
         pedidos = Array.isArray(data) ? data : [];
