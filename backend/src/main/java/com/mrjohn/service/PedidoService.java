@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
+import com.mrjohn.repository.BairroEntregaRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,9 @@ public class PedidoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
+    @Autowired
+    private BairroEntregaRepository bairroEntregaRepository;
+
     // Criar novo pedido
     public Pedido criarPedido(PedidoDTO dto) {
         Pedido pedido = new Pedido();
@@ -37,6 +40,10 @@ public class PedidoService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado")));
 
         pedido.setStatus(StatusPedido.RECEBIDO);
+
+        // Dados de entrega
+        pedido.setEndereco(dto.endereco());
+        pedido.setBairro(dto.bairro());
 
         List<ItemPedido> listaItens = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
@@ -51,13 +58,24 @@ public class PedidoService {
             item.setQuantidade(itemDto.quantidade());
             item.setPrecoUnitario(produto.getPreco());
 
-            // Calcula total no backend
+            // Calcula total dos itens no backend
             total = total.add(produto.getPreco().multiply(BigDecimal.valueOf(itemDto.quantidade())));
             listaItens.add(item);
         }
 
+        // Frete: busca no banco pelo bairro (não confia no valor do front)
+        BigDecimal frete = BigDecimal.ZERO;
+        if (dto.bairro() != null && !dto.bairro().isBlank()) {
+            frete = bairroEntregaRepository.findByBairroIgnoreCase(dto.bairro())
+                    .map(b -> b.getValorEntrega())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST, "Não entregamos no bairro informado."));
+        }
+        pedido.setValorEntrega(frete);
+
+        // Total final = itens + frete
         pedido.setItens(listaItens);
-        pedido.setValorTotal(total);
+        pedido.setValorTotal(total.add(frete));
 
         return pedidoRepository.save(pedido);
     }

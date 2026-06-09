@@ -31,6 +31,15 @@ public class Pedido {
     @Column(name = "status")
     private StatusPedido status;
 
+    @Column(name = "endereco")
+    private String endereco;
+
+    @Column(name = "bairro")
+    private String bairro;
+
+    @Column(name = "valor_entrega")
+    private BigDecimal valorEntrega;
+
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("pedido")
     private List<ItemPedido> itens;
@@ -51,6 +60,15 @@ public class Pedido {
 
     public StatusPedido getStatus() { return status; }
     public void setStatus(StatusPedido status) { this.status = status; }
+
+    public String getEndereco() { return endereco; }
+    public void setEndereco(String endereco) { this.endereco = endereco; }
+
+    public String getBairro() { return bairro; }
+    public void setBairro(String bairro) { this.bairro = bairro; }
+
+    public BigDecimal getValorEntrega() { return valorEntrega; }
+    public void setValorEntrega(BigDecimal valorEntrega) { this.valorEntrega = valorEntrega; }
 
     public List<ItemPedido> getItens() { return itens; }
     public void setItens(List<ItemPedido> itens) { this.itens = itens; }
