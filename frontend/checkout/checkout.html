@@ -25,20 +25,62 @@
 
     <div id="lista-itens"></div>
 
-    <div class="total">
-      Total: R$ <span id="total">0,00</span>
+    <h3>Endereço de Entrega</h3>
+
+    <div class="campo">
+      <label for="cep">CEP</label>
+      <input type="text" id="cep" placeholder="00000-000" maxlength="9" inputmode="numeric">
+      <span class="cep-status" id="cepStatus"></span>
     </div>
 
-    <h3>Endereço de Entrega</h3>
-    <input type="text" id="endereco" placeholder="Digite seu endereço completo">
+    <div class="campo">
+      <label for="rua">Rua</label>
+      <input type="text" id="rua" placeholder="Preenchido pelo CEP">
+    </div>
+
+    <div class="campo">
+      <label for="bairro">Bairro</label>
+      <input type="text" id="bairro" placeholder="Preenchido pelo CEP">
+    </div>
+
+    <div class="campo-linha">
+      <div class="campo">
+        <label for="numero">Número</label>
+        <input type="text" id="numero" placeholder="Ex: 123">
+      </div>
+      <div class="campo">
+        <label for="complemento">Complemento</label>
+        <input type="text" id="complemento" placeholder="Apto, bloco (opcional)">
+      </div>
+    </div>
 
     <h3>Observações</h3>
     <textarea id="observacoes" rows="3" placeholder="Ex: sem cebola, entregar na portaria..."></textarea>
 
-    <button onclick="finalizarPedido()">Confirmar Pedido</button>
+    <!-- Aviso de fora de alcance -->
+    <div class="aviso-entrega" id="avisoEntrega" style="display:none;"></div>
+
+    <!-- Resumo de valores -->
+    <div class="resumo-valores">
+      <div class="linha">
+        <span>Subtotal</span>
+        <span id="subtotal">R$ 0,00</span>
+      </div>
+      <div class="linha">
+        <span>Frete</span>
+        <span id="frete">—</span>
+      </div>
+      <div class="linha total">
+        <span>Total</span>
+        <span id="total">R$ 0,00</span>
+      </div>
+    </div>
+
+    <button id="btnConfirmar" onclick="finalizarPedido()" disabled>Confirmar Pedido</button>
   </div>
 
   <script src="../config.js"></script>
+  <script src="../auth.js"></script>
   <script src="../shared.js"></script>
   <script src="checkout.js"></script>
 </body>
