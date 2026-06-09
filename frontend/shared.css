@@ -357,3 +357,8 @@ input::placeholder, textarea::placeholder {
   .header-logo { width: 55px; }
   .header-nav, .admin-nav { width: 100%; justify-content: flex-end; }
 }
+/* Remove o ícone nativo de revelar senha do Edge/IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
