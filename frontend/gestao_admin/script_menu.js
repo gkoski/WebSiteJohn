@@ -35,7 +35,7 @@ async function listarProdutos() {
                             <p>${p.descricao || ''}</p>
                             <div class="price">R$ ${precoNumerico.toFixed(2).replace('.', ',')}</div>
 
-                            <div style="display: flex; gap: 5px; margin-top: 10px;">
+                            <div class="card-acoes">
                                 <button class="btn-editar" onclick="prepararEdicao(${p.id}, '${(p.nome || '').replace(/'/g, "\\'")}', '${(p.descricao || '').replace(/'/g, "\\'")}', ${p.preco}, '${p.foto || ''}', ${catId})">
                                     Editar
                                 </button>

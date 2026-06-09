@@ -362,3 +362,7 @@ input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none;
 }
+.terms-centered {
+  justify-content: center;
+  margin-top: 20px;
+}

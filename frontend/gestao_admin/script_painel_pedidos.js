@@ -165,7 +165,7 @@ function cardPedidoHTML(p) {
                 <span class="label">Total</span>
                 <span class="valor">${formatarMoeda(p.valorTotal)}</span>
             </div>
-            <div class="pedido-hora" style="padding: 8px 16px 14px; text-align:right;">
+            <div class="pedido-hora">
                 ${formatarHora(p.dataPedido)}
             </div>
         </article>`;
