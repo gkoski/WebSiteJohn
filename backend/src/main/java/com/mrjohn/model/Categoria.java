@@ -4,6 +4,7 @@ import java.util.List;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_categoria")
@@ -18,7 +19,7 @@ public class Categoria {
 	private String nome;
 
 	@OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties("categoria")
+	@JsonIgnore
 	private List<Produto> produto;
 
 	// --- GETTERS E SETTERS ---
