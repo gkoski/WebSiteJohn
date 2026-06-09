@@ -214,6 +214,25 @@ function esconderPreview() {
     if (campo) campo.classList.remove('has-file');
     if (txt) txt.textContent = 'Foto do produto';
 }
+async function carregarCategorias() {
+    try {
+        const res = await fetch(CONFIG.url('categorias'), {
+            headers: CONFIG.getAuthHeaders()
+        });
+        if (!res.ok) return;
+
+        const categorias = await res.json();
+        const select = document.getElementById('catInput');
+
+        // Mantém a opção placeholder e adiciona as categorias do banco
+        select.innerHTML = '<option value="">Categoria...</option>';
+        categorias.forEach(cat => {
+            select.innerHTML += `<option value="${cat.id}">${cat.id} - ${cat.nome}</option>`;
+        });
+    } catch (error) {
+        console.error("Erro ao carregar categorias:", error);
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     if (!CONFIG.checkAdmin()) return;
@@ -224,7 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
         fotoInput.addEventListener('change', () => {
             const arquivo = fotoInput.files && fotoInput.files[0];
             if (!arquivo) {
-                // Voltou a vazio: mostra a foto atual (edição) ou esconde
                 if (fotoAtual) mostrarPreview(resolverFotoUrl(fotoAtual), 'Foto atual');
                 else esconderPreview();
                 return;
@@ -247,5 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    carregarCategorias();
     listarProdutos();
 });

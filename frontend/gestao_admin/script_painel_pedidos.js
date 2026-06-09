@@ -306,6 +306,25 @@ async function mudarStatus(id, novoStatus) {
         showToast(`Pedido #${id} → ${statusLabel(novoStatus)} (offline)`, '');
     }
 }
+async function carregarCategorias() {
+    try {
+        const res = await fetch(CONFIG.url('categorias'), {
+            headers: CONFIG.getAuthHeaders()
+        });
+        if (!res.ok) return;
+
+        const categorias = await res.json();
+        const select = document.getElementById('catInput');
+
+        // Mantém a opção placeholder e adiciona as categorias do banco
+        select.innerHTML = '<option value="">Categoria...</option>';
+        categorias.forEach(cat => {
+            select.innerHTML += `<option value="${cat.id}">${cat.id} - ${cat.nome}</option>`;
+        });
+    } catch (error) {
+        console.error("Erro ao carregar categorias:", error);
+    }
+}
 
 // ------------------------------------------------------------
 // Eventos
