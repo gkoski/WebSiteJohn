@@ -186,21 +186,54 @@ window.irParaCheckout = () => {
 };
 
 /* ================================================================
+   BUSCA / FILTRO NA TELA
+   ================================================================ */
+function filtrarProdutos(termo) {
+  const t = (termo || '').toLowerCase().trim();
+
+  if (!t) {
+    renderProdutos(produtosCarregados, false);
+    return;
+  }
+
+  const filtrados = produtosCarregados.filter(p => {
+    const nome = (p.nome || '').toLowerCase();
+    const desc = (p.descricao || '').toLowerCase();
+    return nome.includes(t) || desc.includes(t);
+  });
+
+  renderProdutos(filtrados, true);
+}
+
+/* ================================================================
    RENDER DOS CARDS POR CATEGORIA
    ================================================================ */
-function renderProdutos(produtos) {
+function renderProdutos(produtos, emBusca = false) {
   [1, 2, 3].forEach(catId => {
     const grid = document.getElementById(`menu-${catId}`);
     const count = document.getElementById(`count-${catId}`);
     if (!grid) return;
 
+    // Seção inteira (pra esconder/mostrar)
+    const section = grid.closest('.cat-section');
+
     const itens = produtos.filter(p => p.categoria && Number(p.categoria.id) === catId);
     if (count) count.textContent = itens.length;
 
     if (itens.length === 0) {
-      grid.innerHTML = `<div class="empty-state">Em breve!</div>`;
+      if (emBusca) {
+        // Modo busca: esconde a seção inteira
+        if (section) section.style.display = 'none';
+      } else {
+        // Sem busca: categoria realmente vazia
+        if (section) section.style.display = '';
+        grid.innerHTML = `<div class="empty-state">Em breve!</div>`;
+      }
       return;
     }
+
+    // Tem itens: garante seção visível
+    if (section) section.style.display = '';
 
     grid.innerHTML = itens.map(p => {
       const preco = typeof p.preco === 'number' ? p.preco : 0;
@@ -270,7 +303,7 @@ async function listarProdutos() {
     if (!response.ok) throw new Error('Erro ' + response.status);
     const produtos = await response.json();
     produtosCarregados = Array.isArray(produtos) ? produtos : [];
-    renderProdutos(produtosCarregados);
+    renderProdutos(produtosCarregados, false);
   } catch (error) {
     console.error('Erro ao carregar produtos:', error);
     showToast('Não foi possível carregar o cardápio.', 'error');
@@ -286,4 +319,9 @@ window.addEventListener('DOMContentLoaded', () => {
   listarProdutos().then(() => setupScrollSpy());
   renderCarrinho();
   atualizarBadge();
+
+  const buscaInput = document.getElementById('buscaProduto');
+  if (buscaInput) {
+    buscaInput.addEventListener('input', (e) => filtrarProdutos(e.target.value));
+  }
 });

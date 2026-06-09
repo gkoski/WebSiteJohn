@@ -644,3 +644,16 @@ body::after {
   .sidebar-header, .sidebar-footer { padding-left: 18px; padding-right: 18px; }
   .sidebar-itens { padding: 14px 18px; }
 }
+.busca-wrap {
+  max-width: 600px;
+  margin: 24px auto 0;
+  padding: 0 28px;
+  position: relative;
+  z-index: 2;
+}
+
+.busca-produto {
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+}
