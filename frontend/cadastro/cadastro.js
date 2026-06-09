@@ -65,24 +65,43 @@ form.addEventListener("submit", function(e) {
       body: JSON.stringify(dadosUsuario)
     })
     .then(async response => {
-      if (response.ok) {
+if (response.ok) {
+  // Cadastro OK — agora faz login automático para obter o token JWT
+  const respLogin = await fetch(CONFIG.url('login'), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: dadosUsuario.email, senha: dadosUsuario.senha })
+  });
 
-        const usuarioCriado = await response.json();
+      if (respLogin.ok) {
+        const usuarioLogado = await respLogin.json();
 
         localStorage.setItem('usuarioLogado', JSON.stringify({
-          id: usuarioCriado.id,
-          nome: usuarioCriado.nome,
-          email: usuarioCriado.email
+          id: usuarioLogado.id,
+          nome: usuarioLogado.nome,
+          email: usuarioLogado.email,
+          role: usuarioLogado.role,
+          token: usuarioLogado.token
         }));
 
         showToast("Cadastro realizado com sucesso!", 'success');
         form.reset();
 
         setTimeout(() => {
-          window.location.href = "../cardapio/cardapio.html";
+          if (usuarioLogado.role === 'ADMIN') {
+            window.location.href = "../gestao_admin/menu.html";
+          } else {
+            window.location.href = "../cardapio/cardapio.html";
+          }
         }, 800);
-
       } else {
+        // Cadastrou mas o login falhou — manda pro login manual
+        showToast("Cadastro feito! Faça login para entrar.", 'success');
+        setTimeout(() => {
+          window.location.href = "../login/login.html";
+        }, 1000);
+      }
+    }     else {
         showToast("Erro no servidor: " + response.status, 'error');
       }
     })
