@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cardápio - Mr. John Sports Bar</title>
+  <title>Cardápio · Mr. John Sports Bar</title>
   <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23C5392B'/><text x='50%25' y='70%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia, serif' font-weight='900' font-style='italic' font-size='40' fill='%23F2E5D0'>J</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -25,45 +25,62 @@
     </div>
   </header>
 
+  <section class="cardapio-hero">
+    <span class="eyebrow">Sports Bar &amp; Eventos · Cajuru, Curitiba</span>
+    <h2>O cardápio <span class="accent">mais pesado</span> da cidade</h2>
+    <p>Blend artesanal, pão fresco do dia, chopp gelado direto da chopeira. Escolhe, manda e a gente prepara.</p>
+  </section>
+
+  <!-- Nav sticky de categorias -->
   <nav class="cat-nav" id="catNav">
     <div class="cat-nav-inner">
-      <a href="#burgers" class="cat-pill active" data-target="burgers">🍔 <span>Burgers</span></a>
-      <a href="#porcoes" class="cat-pill" data-target="porcoes">🍟 <span>Porções</span></a>
+      <a href="#burgers" class="cat-pill active" data-target="burgers">🍔 <span>Burguers</span></a>
+      <a href="#combos" class="cat-pill" data-target="combos">🍟 <span>Combos</span></a>
+      <a href="#porcoes" class="cat-pill" data-target="porcoes">🍤 <span>Porções</span></a>
       <a href="#bebidas" class="cat-pill" data-target="bebidas">🍺 <span>Bebidas</span></a>
     </div>
   </nav>
 
-  <div class="busca-wrap">
-    <input type="text" id="buscaProduto" class="busca-produto" placeholder="🔍 Buscar no cardápio...">
-  </div>
-
   <main class="container">
 
+    <!-- BURGUERS (id 1) -->
     <section class="cat-section" id="burgers" data-cat="1">
-      <div class="cat-section-header">
+      <header class="cat-section-header">
         <span class="eyebrow">Os campeões da casa</span>
-        <h3>Burgers <span class="cat-count" id="count-1">0</span></h3>
+        <h3>Burguers <span class="cat-count" id="count-1">0</span></h3>
         <p>Blend artesanal, pão fresquinho do dia, molhos autorais.</p>
-      </div>
+      </header>
       <div class="menu" id="menu-1"></div>
     </section>
 
-    <section class="cat-section" id="porcoes" data-cat="2">
-      <div class="cat-section-header">
-        <span class="eyebrow">Pra dividir na mesa</span>
-        <h3>Porções <span class="cat-count" id="count-2">0</span></h3>
-        <p>Crocante, dourado e bem servido — perfeito pra acompanhar a partida.</p>
-      </div>
+    <!-- COMBOS (id 2) -->
+    <section class="cat-section" id="combos" data-cat="2">
+      <header class="cat-section-header">
+        <span class="eyebrow">Mais por menos</span>
+        <h3>Combos <span class="cat-count" id="count-2">0</span></h3>
+        <p>O combo completo pra matar a fome — lanche, acompanhamento e bebida.</p>
+      </header>
       <div class="menu" id="menu-2"></div>
     </section>
 
-    <section class="cat-section" id="bebidas" data-cat="3">
-      <div class="cat-section-header">
-        <span class="eyebrow">Pra brindar o jogo</span>
-        <h3>Bebidas <span class="cat-count" id="count-3">0</span></h3>
-        <p>Chopp gelado direto da chopeira, drinks autorais e clássicos.</p>
-      </div>
+    <!-- PORÇÕES (id 3) -->
+    <section class="cat-section" id="porcoes" data-cat="3">
+      <header class="cat-section-header">
+        <span class="eyebrow">Pra dividir na mesa</span>
+        <h3>Porções <span class="cat-count" id="count-3">0</span></h3>
+        <p>Crocante, dourado e bem servido — perfeito pra acompanhar a partida.</p>
+      </header>
       <div class="menu" id="menu-3"></div>
+    </section>
+
+    <!-- BEBIDAS (id 4) -->
+    <section class="cat-section" id="bebidas" data-cat="4">
+      <header class="cat-section-header">
+        <span class="eyebrow">Pra brindar o jogo</span>
+        <h3>Bebidas <span class="cat-count" id="count-4">0</span></h3>
+        <p>Chopp gelado direto da chopeira, drinks autorais e clássicos.</p>
+      </header>
+      <div class="menu" id="menu-4"></div>
     </section>
 
   </main>
@@ -80,6 +97,10 @@
 
     <div class="sidebar-footer">
       <div class="sidebar-totais">
+        <div class="linha-total">
+          <span>Subtotal</span>
+          <span id="subtotalCarrinho">R$ 0,00</span>
+        </div>
         <div class="linha-total destaque">
           <span>Total</span>
           <span id="totalCarrinho">R$ 0,00</span>

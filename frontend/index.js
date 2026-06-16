@@ -1,3 +1,77 @@
+/* ============================================================
+   CARREGAR CARDÁPIO REAL DA API
+   ============================================================ */
+const API_URL_LP = 'http://localhost:8080';
+
+// Mapeia o id da categoria do banco -> data-cat usado nos pills da LP
+const CAT_MAP = { 1: 'burguer', 2: 'combo', 3: 'porcao', 4: 'bebida' };
+
+function resolverFotoLP(foto) {
+  if (!foto) return 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=85';
+  if (foto.startsWith('http')) return foto;
+  if (foto.startsWith('/uploads')) return API_URL_LP + foto;
+  return foto;
+}
+
+function formatarPrecoLP(preco) {
+  return 'R$ ' + Number(preco).toFixed(2).replace('.', ',');
+}
+
+async function carregarCardapioLP() {
+  const carousel = document.getElementById('menuCarousel');
+  if (!carousel) return;
+
+  try {
+    const resp = await fetch(`${API_URL_LP}/produtos`);
+    if (!resp.ok) throw new Error('Falha ao buscar produtos');
+    const produtos = await resp.json();
+
+    if (!produtos.length) {
+      carousel.innerHTML = '<div class="empty-state">Cardápio em atualização. Peça pelo WhatsApp!</div>';
+      return;
+    }
+
+    carousel.innerHTML = produtos.map(p => {
+      const catId = p.categoria ? p.categoria.id : null;
+      const dataCat = CAT_MAP[catId] || 'burguer';
+      const foto = resolverFotoLP(p.foto);
+      const desc = p.descricao || '';
+      return `
+        <article class="menu-card" data-cat="${dataCat}">
+          <div class="img-wrap">
+            <div class="img" style="background-image: url('${foto}');"></div>
+          </div>
+          <div class="body">
+            <h3>${p.nome}</h3>
+            <p>${desc}</p>
+            <div class="row">
+              <span class="price">${formatarPrecoLP(p.preco)}</span>
+              <a href="https://wa.me/5541997096628" target="_blank" rel="noopener" class="order-btn">
+                Pedir
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>`;
+    }).join('');
+
+    // Aplica o filtro inicial: mostra só a categoria do pill ativo (burguer)
+    const ativo = document.querySelector('.cat-pill.active');
+    if (ativo) {
+      const cat = ativo.dataset.cat;
+      carousel.querySelectorAll('.menu-card').forEach(c => {
+        c.style.display = (c.dataset.cat === cat) ? '' : 'none';
+      });
+    }
+    initMenuCarousel();
+  } catch (err) {
+    console.error('Erro ao carregar cardápio:', err);
+    carousel.innerHTML = '<div class="empty-state">Não foi possível carregar o cardápio. Verifique se o servidor está rodando.</div>';
+  }
+}
+
+// Carrega assim que a página abre
+carregarCardapioLP();
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     /* Lenis smooth scroll */
@@ -29,7 +103,9 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     /* Split words into letters once for letter-physics animation */
     (function splitLetters() {
       document.querySelectorAll('.hero-headline .word').forEach(w => {
+        // Skip if already has nested elements (e.g. accent span, hl-circle, hl-under)
         if (w.querySelector('span')) {
+          // For words containing children, split text content of children too
           const accent = w.querySelector('.accent');
           if (accent) {
             const txt = accent.textContent;
@@ -37,7 +113,7 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             [...txt].forEach(ch => {
               const sp = document.createElement('span');
               sp.className = 'ltr';
-              sp.textContent = ch === ' ' ? ' ' : ch;
+              sp.textContent = ch === ' ' ? ' ' : ch;
               accent.appendChild(sp);
             });
           }
@@ -48,7 +124,7 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         [...txt].forEach(ch => {
           const sp = document.createElement('span');
           sp.className = 'ltr';
-          sp.textContent = ch === ' ' ? ' ' : ch;
+          sp.textContent = ch === ' ' ? ' ' : ch;
           w.appendChild(sp);
         });
       });
@@ -64,26 +140,27 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         });
         return;
       }
-      const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-      tl.to('#heroEyebrow', { opacity: 1, y: 0, duration: 1.2 }, 0)
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.to('#heroEyebrow', { opacity: 1, y: 0, duration: 0.7 }, 0)
         .to('.hero-headline .ltr', {
           y: 0, opacity: 1, rotation: 0,
-          duration: 1.4,
-          stagger: { each: 0.025, from: 'start' },
-          ease: 'back.out(1.4)'
-        }, 0.15)
-        .from('#heroImage', { rotation: 14, scale: 0.5, y: 100 }, 0.3)
-        .to('#heroImage', { opacity: 1, scale: 1, rotation: -2, duration: 1.8, ease: 'expo.out' }, 0.3)
-        .to('#heroSub', { opacity: 1, y: 0, duration: 1.2 }, 1.6)
-        .to('#heroCtas', { opacity: 1, y: 0, duration: 1.2 }, 1.8)
-        .to('#heroMeta', { opacity: 1, y: 0, duration: 1.2, stagger: 0.1 }, 2)
+          duration: 0.9,
+          stagger: { each: 0.018, from: 'start' },
+          ease: 'power3.out'
+        }, 0.1)
+        .from('#heroImage', { scale: 0.96, y: 24 }, 0.15)
+        .to('#heroImage', { opacity: 1, scale: 1, rotation: -2, duration: 1.0, ease: 'power2.out' }, 0.15)
+        .to('#heroSub', { opacity: 1, y: 0, duration: 0.7 }, 0.7)
+        .to('#heroCtas', { opacity: 1, y: 0, duration: 0.7 }, 0.85)
+        .to('#heroMeta', { opacity: 1, y: 0, duration: 0.7, stagger: 0.06 }, 1.0)
         .add(() => {
           document.getElementById('hlCircle')?.classList.add('in');
           document.getElementById('hlUnder')?.classList.add('in');
-        }, 2.2);
+        }, 1.4);
     }
 
     window.addEventListener('load', () => {
+      // Hide preloader after load
       setTimeout(() => {
         document.getElementById('preloader')?.classList.add('gone');
         kickHero();
@@ -93,78 +170,76 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     /* Scroll reveals */
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && !reduced) {
 
+      // About image — simple fade + slight scale
       gsap.fromTo('#aboutImage',
-        { clipPath: 'circle(0% at 50% 50%)', scale: 0.92 },
+        { opacity: 0, scale: 0.98, y: 18 },
         {
-          clipPath: 'circle(75% at 50% 50%)', scale: 1,
-          duration: 1.8, ease: 'expo.out',
+          opacity: 1, scale: 1, y: 0,
+          duration: 0.9, ease: 'power3.out',
           scrollTrigger: { trigger: '#aboutImage', start: 'top 85%', once: true }
         }
       );
-      gsap.fromTo('#aboutImage .img', { y: -40 }, {
-        y: 40, ease: 'none',
-        scrollTrigger: { trigger: '#aboutImage', start: 'top bottom', end: 'bottom top', scrub: 1.2 }
+      gsap.fromTo('#aboutImage .img', { y: -16 }, {
+        y: 16, ease: 'none',
+        scrollTrigger: { trigger: '#aboutImage', start: 'top bottom', end: 'bottom top', scrub: 1.4 }
       });
+      // (idle rotation removed — only mouse parallax remains)
 
+      // Menu cards — gentle fade-in stagger when carousel enters viewport
       ScrollTrigger.create({
         trigger: '#menuCarousel',
         start: 'top 85%',
         once: true,
         onEnter: () => {
           gsap.fromTo('.menu-carousel .menu-card',
-            { opacity: 0, y: 30 },
-            { opacity: 1, y: 0, duration: 0.9, stagger: 0.08, ease: 'expo.out' }
+            { opacity: 0, y: 14 },
+            { opacity: 1, y: 0, duration: 0.6, stagger: 0.05, ease: 'power2.out' }
           );
         }
       });
 
-      gsap.utils.toArray('.review-card').forEach((card, i) => {
-        gsap.fromTo(card,
-          { opacity: 1, clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)' },
-          {
-            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-            duration: 1.4,
-            delay: (i % 3) * 0.12,
-            ease: 'expo.out',
-            scrollTrigger: { trigger: card, start: 'top 92%', once: true }
-          }
-        );
-        gsap.fromTo(card.querySelectorAll('.quote, .author, .stars-svg'),
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1, y: 0,
-            duration: 1.2,
-            stagger: 0.08,
-            delay: 0.4 + (i % 3) * 0.12,
-            ease: 'power3.out',
-            scrollTrigger: { trigger: card, start: 'top 92%', once: true }
-          }
-        );
+      // Reviews — entrance fade-in for head + stage (cards animate continuously via RAF, see initReviewsScroll)
+      ScrollTrigger.create({
+        trigger: '#reviewsHead',
+        start: 'top 88%',
+        once: true,
+        onEnter: () => document.getElementById('reviewsHead')?.classList.add('in')
+      });
+      ScrollTrigger.create({
+        trigger: '#reviewsStage',
+        start: 'top 90%',
+        once: true,
+        onEnter: () => document.getElementById('reviewsStage')?.classList.add('in')
       });
 
+      // (phone scroll parallax removed — now using CSS keyframes for continuous float)
+
+      // Section heading words reveal
       gsap.utils.toArray('.section-head h2').forEach(h => {
-        gsap.fromTo(h, { y: 30, opacity: 0 }, {
+        gsap.fromTo(h, { y: 14, opacity: 0 }, {
           y: 0, opacity: 1,
-          duration: 1.2, ease: 'expo.out',
+          duration: 0.7, ease: 'power3.out',
           scrollTrigger: { trigger: h, start: 'top 88%', once: true }
         });
       });
       gsap.utils.toArray('.section-head p, .section-head .eyebrow').forEach(p => {
-        gsap.fromTo(p, { y: 20, opacity: 0 }, {
+        gsap.fromTo(p, { y: 10, opacity: 0 }, {
           y: 0, opacity: 1,
-          duration: 1, delay: 0.2, ease: 'power3.out',
+          duration: 0.6, delay: 0.12, ease: 'power2.out',
           scrollTrigger: { trigger: p, start: 'top 90%', once: true }
         });
       });
 
+      // About text features stagger
       gsap.utils.toArray('.about-text .feature').forEach((f, i) => {
-        gsap.fromTo(f, { x: 30, opacity: 0 }, {
-          x: 0, opacity: 1,
-          duration: 1, delay: i * 0.1, ease: 'power3.out',
+        gsap.fromTo(f, { y: 12, opacity: 0 }, {
+          y: 0, opacity: 1,
+          duration: 0.6, delay: i * 0.08, ease: 'power2.out',
           scrollTrigger: { trigger: f, start: 'top 92%', once: true }
         });
       });
 
+      // Hero handdrawn highlights when in view
       ScrollTrigger.create({
         trigger: '#hlCircle',
         start: 'top 90%',
@@ -173,88 +248,8 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       });
     }
 
-    /* === INTEGRAÇÃO API — Produtos em Destaque === */
-    async function carregarDestaque() {
-      try {
-        const response = await fetch(CONFIG.url('destaque'));
-        if (!response.ok) return;
-
-        const produtos = await response.json();
-        const carousel = document.getElementById('menuCarousel');
-        if (!carousel) return;
-
-        // Remove cards mockados
-        carousel.querySelectorAll('.menu-card').forEach(c => c.remove());
-
-        produtos.forEach(p => {
-          const preco = typeof p.preco === 'number' ? p.preco : 0;
-          const card = document.createElement('div');
-          card.className = 'menu-card';
-          card.innerHTML = `
-            <div class="menu-card-inner">
-              <div class="face">
-                <div class="img-wrap">
-                  <span class="badge hot">Destaque</span>
-                  <div class="img" style="background-image: url('${p.foto || 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=600&q=80'}');"></div>
-                </div>
-                <div class="body">
-                  <h3 class="name">${p.nome}</h3>
-                  <p class="desc">${p.descricao || ''}</p>
-                  <div class="price-row">
-                    <span class="price">R$ ${preco.toFixed(2).replace('.', ',')}</span>
-                  </div>
-                  <a href="cardapio/cardapio.html" class="btn btn-primary" style="margin-top:16px">
-                    Ver cardápio <span class="arr">→</span>
-                  </a>
-                </div>
-                <button class="flip-cue" aria-label="Ver detalhes">
-                  <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-                </button>
-              </div>
-              <div class="face back">
-                <h3>${p.nome}</h3>
-                <p>${p.descricao || 'Ingredientes selecionados com muito cuidado.'}</p>
-                <a href="cardapio/cardapio.html" class="order-back">
-                  Pedir agora
-                  <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-              </div>
-            </div>`;
-          carousel.appendChild(card);
-        });
-
-        // Reativar flip nos novos cards
-        carousel.querySelectorAll('.flip-cue').forEach(cue => {
-          cue.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            cue.closest('.menu-card')?.classList.toggle('flipped');
-          });
-        });
-
-        // Reativar tilt 3D nos novos cards
-        const isFine = window.matchMedia('(pointer: fine)').matches;
-        if (isFine && !reduced) {
-          carousel.querySelectorAll('.menu-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-              const r = card.getBoundingClientRect();
-              const x = (e.clientX - r.left) / r.width - 0.5;
-              const y = (e.clientY - r.top) / r.height - 0.5;
-              card.style.transform = `perspective(1200px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-8px)`;
-            });
-            card.addEventListener('mouseleave', () => { card.style.transform = ''; });
-          });
-        }
-
-      } catch (error) {
-        console.error('Erro ao carregar destaques:', error);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', carregarDestaque);
-
     /* Menu carousel — auto-advance + filter */
-    (function () {
+    function initMenuCarousel() {
       const carousel = document.getElementById('menuCarousel');
       if (!carousel) return;
       const cards = carousel.querySelectorAll('.menu-card');
@@ -332,7 +327,7 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           resetAuto();
         });
       });
-    })();
+    }
 
     /* Anchor smooth scroll */
     document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -350,33 +345,6 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         }
       });
     });
-
-    /* Custom cursor follow */
-    (function () {
-      const isFine = window.matchMedia('(pointer: fine)').matches;
-      if (!isFine || reduced) return;
-      const dot = document.getElementById('cursorDot');
-      const ring = document.getElementById('cursorRing');
-      if (!dot || !ring) return;
-      let mx = window.innerWidth/2, my = window.innerHeight/2;
-      let rx = mx, ry = my;
-      window.addEventListener('mousemove', (e) => {
-        mx = e.clientX; my = e.clientY;
-        dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
-      });
-      function follow() {
-        rx += (mx - rx) * 0.18;
-        ry += (my - ry) * 0.18;
-        ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
-        requestAnimationFrame(follow);
-      }
-      follow();
-      const sel = 'a, button, .menu-card, .review-card, .cat-pill, .contact-row, .story-step';
-      document.querySelectorAll(sel).forEach(el => {
-        el.addEventListener('mouseenter', () => { ring.classList.add('hover'); dot.classList.add('hover'); });
-        el.addEventListener('mouseleave', () => { ring.classList.remove('hover'); dot.classList.remove('hover'); });
-      });
-    })();
 
     /* Burger assembly — pieces falling stagger */
     (function () {
@@ -527,19 +495,6 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       document.querySelectorAll('.stars-svg').forEach(el => el.classList.add('in'));
     }
 
-    /* Section title bar-sweep reveal */
-    if (typeof IntersectionObserver !== 'undefined' && !reduced) {
-      const sweepObs = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('sweep');
-            sweepObs.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.5 });
-      document.querySelectorAll('.section-head h2, .story-header h2').forEach(el => sweepObs.observe(el));
-    }
-
     /* Blur-to-sharp reveal */
     if (typeof IntersectionObserver !== 'undefined' && !reduced) {
       const blurObs = new IntersectionObserver((entries) => {
@@ -612,44 +567,67 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       });
     }
 
-    /* Replay animations button */
+    /* Mobile menu (burger) */
     (function () {
-      const btn = document.getElementById('replayBtn');
-      if (!btn) return;
-      btn.addEventListener('click', () => {
-        btn.classList.add('spin');
-        setTimeout(() => btn.classList.remove('spin'), 1500);
+      const burger = document.getElementById('navBurger');
+      const drawer = document.getElementById('navMobile');
+      if (!burger || !drawer) return;
+      function toggle(open) {
+        const isOpen = open ?? burger.getAttribute('aria-expanded') !== 'true';
+        burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        if (isOpen) drawer.removeAttribute('hidden');
+        else drawer.setAttribute('hidden', '');
+      }
+      burger.addEventListener('click', () => toggle());
+      drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggle(false)));
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') toggle(false); });
+    })();
 
-        // Reset hero letters
-        document.querySelectorAll('.hero-headline .ltr').forEach(l => {
-          l.style.opacity = '0';
-          l.style.transform = 'translateY(105%)';
-        });
-        ['heroEyebrow','heroSub','heroCtas','heroMeta'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) { el.style.opacity = '0'; el.style.transform = 'translateY(20px)'; }
-        });
-        const heroImg = document.getElementById('heroImage');
-        if (heroImg) { heroImg.style.opacity = '0'; heroImg.style.transform = 'rotate(14deg) scale(0.5) translateY(100px)'; }
-        document.getElementById('hlCircle')?.classList.remove('in');
-        document.getElementById('hlUnder')?.classList.remove('in');
+    /* Reviews — 3 vertical columns, infinite RAF scroll (keelon-style) */
+    (function initReviewsScroll() {
+      const stage = document.getElementById('reviewsStage');
+      if (!stage || reduced) return;
+      const cols = [...stage.querySelectorAll('.reviews-col')];
 
-        // Scroll back to top and replay hero
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(() => {
-          if (typeof gsap !== 'undefined') gsap.killTweensOf('*');
-          kickHero();
-          // Re-fire all scroll triggers from current scroll position
-          if (window.ScrollTrigger) {
-            ScrollTrigger.getAll().forEach(st => {
-              try {
-                st.disable(false);
-                st.enable(false);
-                st.refresh();
-              } catch (e) {}
-            });
-          }
-        }, 600);
+      const animators = cols.map(col => {
+        const list = col.querySelector('.reviews-list');
+        const speed = parseFloat(col.dataset.speed) || 30; // px/s (negative = up, positive = down)
+        // Clone children once for seamless loop
+        [...list.children].forEach(child => list.appendChild(child.cloneNode(true)));
+        const state = { y: 0, list, speed, halfHeight: 0 };
+        const measure = () => {
+          state.halfHeight = list.scrollHeight / 2;
+          state.y = speed < 0 ? 0 : -state.halfHeight;
+        };
+        measure();
+        return { state, measure };
+      });
+
+      let last = performance.now();
+      let visible = true;
+
+      const io = new IntersectionObserver(([e]) => visible = e.isIntersecting, { threshold: 0.05 });
+      io.observe(stage);
+
+      function tick(now) {
+        const dt = Math.min(80, now - last) / 1000;
+        last = now;
+        if (visible) {
+          animators.forEach(({ state }) => {
+            state.y += state.speed * dt;
+            if (state.speed > 0 && state.y >= 0) state.y -= state.halfHeight;
+            else if (state.speed < 0 && state.y <= -state.halfHeight) state.y += state.halfHeight;
+            state.list.style.transform = `translate3d(0, ${state.y.toFixed(2)}px, 0)`;
+          });
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => animators.forEach(a => a.measure()), 150);
       });
     })();
 
@@ -718,11 +696,10 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const meta = document.getElementById('heroMeta');
       if (!meta) return;
       const items = meta.querySelectorAll('.hero-meta-item strong');
-      const targets = [4.8, 25, 12];
+      const targets = [4.9, 17];
       const formatters = [
         (v) => v.toFixed(1).replace('.', ','),
-        (v) => Math.round(v) + ' min',
-        (v) => Math.round(v) + ' telões'
+        (v) => Math.round(v) + 'h'
       ];
       items.forEach((el, i) => {
         const t = targets[i];
@@ -744,6 +721,22 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       });
     })();
 
+    /* Menu cards 3D tilt */
+    (function () {
+      const isFine = window.matchMedia('(pointer: fine)').matches;
+      if (!isFine || reduced) return;
+      document.querySelectorAll('.menu-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const r = card.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - 0.5;
+          const y = (e.clientY - r.top) / r.height - 0.5;
+          card.style.transform = `perspective(1200px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-8px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+    })();
 
     /* Floating circles parallax on scroll */
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && !reduced) {
@@ -755,25 +748,13 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         });
       });
 
-      // About features stagger
+      // About features stagger (duplicate-safe — main definition above handles real entrance)
       gsap.utils.toArray('.about-text .feature').forEach((f, i) => {
         gsap.to(f, {
-          opacity: 1, x: 0,
-          duration: 1.1, delay: i * 0.12, ease: 'expo.out',
+          opacity: 1, x: 0, y: 0,
+          duration: 0.55, delay: i * 0.07, ease: 'power2.out',
           scrollTrigger: { trigger: f, start: 'top 92%', once: true }
         });
-      });
-
-      // Marquee enter (rotate slight on scroll)
-      gsap.to('#marquee1', {
-        rotation: 0,
-        ease: 'none',
-        scrollTrigger: { trigger: '#marquee1', start: 'top bottom', end: 'bottom top', scrub: 1 }
-      });
-      gsap.to('#marquee2', {
-        rotation: -1,
-        ease: 'none',
-        scrollTrigger: { trigger: '#marquee2', start: 'top bottom', end: 'bottom top', scrub: 1 }
       });
 
       // Hand-drawn underlines on additional spots

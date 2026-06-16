@@ -209,7 +209,7 @@ function filtrarProdutos(termo) {
    RENDER DOS CARDS POR CATEGORIA
    ================================================================ */
 function renderProdutos(produtos, emBusca = false) {
-  [1, 2, 3].forEach(catId => {
+  [1, 2, 3, 4].forEach(catId => {
     const grid = document.getElementById(`menu-${catId}`);
     const count = document.getElementById(`count-${catId}`);
     if (!grid) return;
