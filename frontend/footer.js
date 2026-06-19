@@ -18,9 +18,14 @@
     style.id = 'omni-footer-style';
     style.textContent = `
       .omni-footer {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9999;
         width: 100%;
         box-sizing: border-box;
-        padding: 22px 20px;
+        padding: 14px 20px;
         text-align: center;
         font-family: 'DM Sans', system-ui, sans-serif;
         font-size: 13px;
