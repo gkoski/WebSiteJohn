@@ -2,7 +2,7 @@
 O projeto trata-se de uma empresa de tecnologia, com foco no desenvolvimento de sites para resolução de problemas de pequenos negócios. O serviço oferecido conta com atendimento personalizado para cada caso.
 O caso do Mr john SportBar & Eventos, refere-se a um sistema de entregas de lanches, visando a melhoria no atendimento do estabelecimento.
 
-O projeto é um projeto full-stack que será desenvolvido em HTML, CSS, Javascript, Java, PHP e SQL.
+O projeto é um projeto full-stack que será desenvolvido em HTML, CSS, Javascript, Java e SQL.
 
 O front-end inclui: HTML, CSS e Javascript. 
 Sendo: 
