@@ -19,10 +19,17 @@ CREATE TABLE tb_produto (
 CREATE TABLE tb_usuario (
     usuario_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    cpf VARCHAR(11) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    login VARCHAR(255) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL
+    cpf VARCHAR(11) UNIQUE,
+    email VARCHAR(255) NOT NULL,
+    login VARCHAR(255) NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'CLIENTE'
+);
+
+CREATE TABLE tb_bairro_entrega (
+    bairro_entrega_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    bairro VARCHAR(255) NOT NULL,
+    valor_entrega DECIMAL(19,2) NOT NULL
 );
 
 CREATE TABLE tb_pedido (
@@ -30,6 +37,9 @@ CREATE TABLE tb_pedido (
     data_pedido DATETIME NOT NULL,
     valor_total DECIMAL(10,2),
     status VARCHAR(50),
+    endereco VARCHAR(255),
+    bairro VARCHAR(255),
+    valor_entrega DECIMAL(19,2),
     usuario_id BIGINT,
     CONSTRAINT fk_usuario_pedido FOREIGN KEY (usuario_id) REFERENCES tb_usuario(usuario_id)
 );
@@ -37,7 +47,7 @@ CREATE TABLE tb_pedido (
 CREATE TABLE tb_pedido_itens (
     item_pedido_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     quantidade INT NOT NULL,
-    preco_unitario DECIMAL(10,2),
+    preco_unitario DECIMAL(19,2),
     pedido_id BIGINT,
     produto_id BIGINT,
     CONSTRAINT fk_pedido_itens_id FOREIGN KEY (pedido_id) REFERENCES tb_pedido(pedido_id),

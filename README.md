@@ -20,9 +20,11 @@ O bar não tinha um sistema próprio para receber e acompanhar pedidos de entreg
 
 ## Arquitetura
 
-Backend em camadas (controller, service, repository, model, dto), com autenticação stateless via JWT e Spring Security protegendo os endpoints administrativos.
+Backend em camadas (controller, service, repository, model, dto), com autenticação stateless via JWT, Spring Security protegendo os endpoints administrativos e controle de acesso por papel (`role` do usuário).
 
 Entidades principais: Usuário, Produto, Categoria, Pedido, Item de Pedido, Bairro de Entrega.
+
+`database/schema` tem o SQL de criação das tabelas; `database/menu` tem um seed de exemplo com categorias e produtos.
 
 ## Stack
 
