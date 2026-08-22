@@ -12,18 +12,32 @@ O bar não tinha um sistema próprio para receber e acompanhar pedidos de entreg
 
 - Cardápio com categorias e fotos dos produtos
 - Cálculo de entrega por bairro
+- Cadastro e login de usuário com autenticação JWT
 - Fluxo de pedido com status (recebido, preparando, enviado, entregue, cancelado)
-- Autenticação de usuário via JWT
+- Acompanhamento do pedido pelo cliente
 - Upload de imagens dos produtos
+- Documentação da API via Swagger/OpenAPI
+
+## Arquitetura
+
+Backend em camadas (controller, service, repository, model, dto), com autenticação stateless via JWT e Spring Security protegendo os endpoints administrativos.
+
+Entidades principais: Usuário, Produto, Categoria, Pedido, Item de Pedido, Bairro de Entrega.
 
 ## Stack
 
 **Frontend:** HTML, CSS, JavaScript
-**Backend:** Java, Spring Boot, MySQL
+**Backend:** Java 21, Spring Boot 3.2, Spring Security, Spring Data JPA, MySQL, JWT (jjwt), Swagger/OpenAPI
 
-## Configuração
+## Como rodar
 
-Copie `backend/.env.example` para `.env` (ou exporte como variáveis de ambiente) e preencha `DB_USERNAME`, `DB_PASSWORD` e `JWT_SECRET` com valores próprios antes de rodar.
+**Backend:**
+1. Copie `backend/.env.example` para `.env` (ou exporte como variáveis de ambiente) e preencha `DB_USERNAME`, `DB_PASSWORD` e `JWT_SECRET`
+2. `cd backend`
+3. `mvn spring-boot:run`
+
+**Frontend:**
+Abra os arquivos em `frontend/` num servidor local (Live Server, por exemplo), apontando as chamadas de API para o backend rodando.
 
 ## Status
 
